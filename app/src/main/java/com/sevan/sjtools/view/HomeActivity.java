@@ -7,12 +7,15 @@ import android.view.MenuItem;
 
 import com.sevan.sjtools.R;
 
+import butterknife.ButterKnife;
+
 public class HomeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        ButterKnife.inject(this);
     }
 
 

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SJ Library</string>
+
+    <string name="crash_tip">Sorry, the Application will exit due to an internal error.</string>
+</resources>

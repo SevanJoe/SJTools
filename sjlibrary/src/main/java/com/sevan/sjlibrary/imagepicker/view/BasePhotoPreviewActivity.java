@@ -32,7 +32,7 @@ import android.widget.TextView;
 
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
-import com.sevan.sjlibrary.imagepicker.util.AnimationUtil;
+import com.sevan.sjlibrary.utils.AnimationUtils;
 
 import java.util.List;
 
@@ -133,11 +133,11 @@ public class BasePhotoPreviewActivity extends Activity implements OnPageChangeLi
 		@Override
 		public void onClick(View v) {
 			if (!isUp) {
-				new AnimationUtil(getApplicationContext(), R.anim.translate_up)
+				new AnimationUtils(getApplicationContext(), R.anim.translate_up)
 						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
 				isUp = true;
 			} else {
-				new AnimationUtil(getApplicationContext(), R.anim.translate_down_current)
+				new AnimationUtils(getApplicationContext(), R.anim.translate_down_current)
 						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
 				isUp = false;
 			}

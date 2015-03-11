@@ -46,7 +46,7 @@ public class AlbumController {
 
     public List<ImageModel> getRecentImageList() {
         Cursor cursor = contentResolver.query(Media.EXTERNAL_CONTENT_URI,
-                new String[] {ImageColumns.DATA, ImageColumns.DATE_ADDED, ImageColumns.SIZE},
+                new String[]{ImageColumns.DATA, ImageColumns.DATE_ADDED, ImageColumns.SIZE},
                 null, null, ImageColumns.DATE_ADDED);
         if (null == cursor || !cursor.moveToNext()) {
             return new ArrayList<>();
@@ -60,6 +60,7 @@ public class AlbumController {
                 imageModelList.add(imageModel);
             }
         } while (cursor.moveToPrevious());
+        cursor.close();
         return imageModelList;
     }
 
@@ -67,7 +68,7 @@ public class AlbumController {
         List<AlbumModel> albumModelList = new ArrayList<>();
         Map<String, AlbumModel> albumModelMap = new HashMap<>();
         Cursor cursor = contentResolver.query(Media.EXTERNAL_CONTENT_URI,
-                new String[] {ImageColumns.DATA, ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.SIZE},
+                new String[]{ImageColumns.DATA, ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.SIZE},
                 null, null, null);
         if (null == cursor || !cursor.moveToNext()) {
             return new ArrayList<>();
@@ -89,13 +90,14 @@ public class AlbumController {
                 albumModelList.add(albumModel);
             }
         } while (cursor.moveToPrevious());
+        cursor.close();
         return albumModelList;
     }
 
     public List<ImageModel> getImageListByAlbum(String name) {
         Cursor cursor = contentResolver.query(Media.EXTERNAL_CONTENT_URI,
-                new String[] {ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.DATA, ImageColumns.DATE_ADDED, ImageColumns.SIZE},
-                "bucket_display_name = ?", new String[] {name}, ImageColumns.DATE_ADDED);
+                new String[]{ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.DATA, ImageColumns.DATE_ADDED, ImageColumns.SIZE},
+                "bucket_display_name = ?", new String[]{name}, ImageColumns.DATE_ADDED);
         if (null == cursor || !cursor.moveToNext()) {
             return new ArrayList<>();
         }
@@ -108,6 +110,7 @@ public class AlbumController {
                 imageModelList.add(imageModel);
             }
         } while (cursor.moveToPrevious());
+        cursor.close();
         return imageModelList;
     }
 }

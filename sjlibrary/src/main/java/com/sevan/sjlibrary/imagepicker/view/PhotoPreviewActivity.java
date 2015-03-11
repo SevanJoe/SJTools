@@ -18,22 +18,22 @@ package com.sevan.sjlibrary.imagepicker.view;
 
 import android.os.Bundle;
 
-import com.sevan.sjlibrary.imagepicker.domain.ImagePickerDomain;
+import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
-import com.sevan.sjlibrary.imagepicker.util.CommonUtils;
+import com.sevan.sjlibrary.utils.CommonUtils;
 
 import java.util.List;
 
 
 public class PhotoPreviewActivity extends BasePhotoPreviewActivity implements PhotoSelectorActivity.OnLocalReccentListener {
 
-	private ImagePickerDomain photoSelectorDomain;
+	private ImagePickLoader photoSelectorDomain;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		photoSelectorDomain = new ImagePickerDomain(getApplicationContext());
+		photoSelectorDomain = new ImagePickLoader(getApplicationContext());
 
 		init(getIntent().getExtras());
 	}
@@ -52,7 +52,7 @@ public class PhotoPreviewActivity extends BasePhotoPreviewActivity implements Ph
 			String albumName = extras.getString("album"); // ���
 			this.current = extras.getInt("position");
 			if (!CommonUtils.isNull(albumName) && albumName.equals(PhotoSelectorActivity.RECCENT_PHOTO)) {
-				photoSelectorDomain.getReccent(this);
+				photoSelectorDomain.loadRecentImageList(this);
 			} else {
 				photoSelectorDomain.getAlbum(albumName, this);
 			}

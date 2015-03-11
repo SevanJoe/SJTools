@@ -34,11 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sevan.sjlibrary.R;
-import com.sevan.sjlibrary.imagepicker.domain.ImagePickerDomain;
+import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
-import com.sevan.sjlibrary.imagepicker.util.AnimationUtil;
-import com.sevan.sjlibrary.imagepicker.util.CommonUtils;
+import com.sevan.sjlibrary.utils.AnimationUtils;
+import com.sevan.sjlibrary.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class PhotoSelectorActivity extends Activity implements
 	private ListView lvAblum;
 	private Button btnOk;
 	private TextView tvAlbum, tvPreview, tvTitle;
-	private ImagePickerDomain photoSelectorDomain;
+	private ImagePickLoader photoSelectorDomain;
 	private PhotoSelectorAdapter photoAdapter;
 	private AlbumAdapter albumAdapter;
 	private RelativeLayout layoutAlbum;
@@ -81,7 +81,7 @@ public class PhotoSelectorActivity extends Activity implements
 			MAX_IMAGE = getIntent().getIntExtra(KEY_MAX, 10);
 		}
 
-		photoSelectorDomain = new ImagePickerDomain(getApplicationContext());
+		photoSelectorDomain = new ImagePickLoader(getApplicationContext());
 
 		selected = new ArrayList<ImageModel>();
 
@@ -110,8 +110,8 @@ public class PhotoSelectorActivity extends Activity implements
 
 		findViewById(R.id.bv_back_lh).setOnClickListener(this); // ����
 
-		photoSelectorDomain.getReccent(reccentListener); // ���������Ƭ
-		photoSelectorDomain.updateAlbum(albumListener); // ���������Ϣ
+		photoSelectorDomain.loadRecentImageList(reccentListener); // ���������Ƭ
+		photoSelectorDomain.loadAlbumList(albumListener); // ���������Ϣ
 	}
 
 	@Override
@@ -191,13 +191,13 @@ public class PhotoSelectorActivity extends Activity implements
 	/** ��������б� */
 	private void popAlbum() {
 		layoutAlbum.setVisibility(View.VISIBLE);
-		new AnimationUtil(getApplicationContext(), R.anim.translate_up_current)
+		new AnimationUtils(getApplicationContext(), R.anim.translate_up_current)
 				.setLinearInterpolator().startAnimation(layoutAlbum);
 	}
 
 	/** ��������б� */
 	private void hideAlbum() {
-		new AnimationUtil(getApplicationContext(), R.anim.translate_down)
+		new AnimationUtils(getApplicationContext(), R.anim.translate_down)
 				.setLinearInterpolator().startAnimation(layoutAlbum);
 		layoutAlbum.setVisibility(View.GONE);
 	}
@@ -267,7 +267,7 @@ public class PhotoSelectorActivity extends Activity implements
 
 		// ������Ƭ�б�
 		if (current.getName().equals(RECCENT_PHOTO))
-			photoSelectorDomain.getReccent(reccentListener);
+			photoSelectorDomain.loadRecentImageList(reccentListener);
 		else
 			photoSelectorDomain.getAlbum(current.getName(), reccentListener); // ��ȡѡ��������Ƭ
 	}

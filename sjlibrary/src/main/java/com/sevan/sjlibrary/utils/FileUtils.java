@@ -25,6 +25,7 @@ import java.io.File;
  * Created by Sevan Joe on 3/10/2015.
  */
 public class FileUtils {
+
     private static boolean isExternalMounted() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }

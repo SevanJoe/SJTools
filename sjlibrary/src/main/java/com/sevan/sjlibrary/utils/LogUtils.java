@@ -14,26 +14,34 @@
  * limitations under the License.
  */
 
-package com.sevan.sjtools;
+package com.sevan.sjlibrary.utils;
 
-import android.app.Application;
+import android.util.Log;
 
-import com.sevan.sjlibrary.tools.CrashHandler;
+import com.sevan.sjlibrary.BuildConfig;
 
 /**
- * Created by Sevan Joe on 3/10/2015.
+ * Created by Sevan Joe on 3/11/2015.
  */
-public class SJToolsApplication extends Application {
+public class LogUtils {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
+    private static final String TAG = "SJ Library";
 
-        registerCrashHandler();
+    public static void d(String debugInfo) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, debugInfo);
+        }
     }
 
-    private void registerCrashHandler() {
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+    public static void e(String errorInfo) {
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, errorInfo);
+        }
+    }
+
+    public static void e(String errorInfo, Throwable throwable) {
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, errorInfo, throwable);
+        }
     }
 }

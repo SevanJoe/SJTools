@@ -22,11 +22,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Looper;
 import android.os.Process;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.utils.FileUtils;
+import com.sevan.sjlibrary.utils.LogUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,7 +46,6 @@ import java.util.Map;
  * Created by Sevan Joe on 3/10/2015.
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
-    private String TAG = CrashHandler.class.getSimpleName();
 
     private Thread.UncaughtExceptionHandler defaultHandler;
     private Context context;
@@ -81,7 +80,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
-                Log.e(TAG, "error: ", e);
+                LogUtils.e("error: ", e);
             }
 
             android.os.Process.killProcess(Process.myPid());
@@ -119,7 +118,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 infoMap.put("versionCode", versionCode);
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "error occurred during collect package info");
+            LogUtils.e("error occurred during collect package info");
         }
         Field[] fields = Build.class.getDeclaredFields();
         for (Field field : fields) {
@@ -127,7 +126,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             try {
                 infoMap.put(field.getName(), field.get(null).toString());
             } catch (IllegalAccessException e) {
-                Log.e(TAG, "error occurred during collect crash info");
+                LogUtils.e("error occurred during collect crash info");
             }
         }
     }
@@ -170,7 +169,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 fileOutputStream.write(string.getBytes());
                 fileOutputStream.close();
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                LogUtils.e(e.getMessage());
             }
         }
     }

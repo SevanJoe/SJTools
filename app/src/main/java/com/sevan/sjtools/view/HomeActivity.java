@@ -17,6 +17,7 @@
 package com.sevan.sjtools.view;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.sevan.sjlibrary.imagepicker.view.PhotoSelectorActivity;
 import com.sevan.sjtools.R;
 
 import butterknife.ButterKnife;
@@ -44,8 +46,11 @@ public class HomeActivity extends ActionBarActivity {
     Toolbar toolbar;
 
     @OnClick(R.id.test_crash) void testCrash() {
-        String s = null;
-        System.out.println(s.equals("anything"));
+        Intent intent = new Intent(this, PhotoSelectorActivity.class);
+        intent.putExtra(PhotoSelectorActivity.KEY_MAX, 4);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//        context.startActivityForResult(intent, requestCode);
+        startActivity(intent);
     }
 
     private ActionBarDrawerToggle drawerToggle;

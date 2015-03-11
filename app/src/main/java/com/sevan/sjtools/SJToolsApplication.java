@@ -17,8 +17,8 @@
 package com.sevan.sjtools;
 
 import android.app.Application;
+import android.content.Context;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.sevan.sjlibrary.tools.CrashHandler;
@@ -32,17 +32,18 @@ public class SJToolsApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        registerCrashHandler();
+        registerCrashHandler(getApplicationContext());
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                .defaultDisplayImageOptions(DisplayImageOptions.createSimple())
-                .memoryCacheExtraOptions(480, 800).threadPoolSize(5).build();
-
-        ImageLoader.getInstance().init(config);
+        initImageLoader(getApplicationContext());
     }
 
-    private void registerCrashHandler() {
+    private void registerCrashHandler(Context context) {
         CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(getApplicationContext());
+        crashHandler.init(context);
+    }
+
+    private void initImageLoader(Context context) {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context).build();
+        ImageLoader.getInstance().init(config);
     }
 }

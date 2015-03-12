@@ -25,7 +25,6 @@
         android:id="@+id/action_count"
         android:orderInCategory="90"
         android:title="@string/select_count"
-        android:enabled="false"
         app:showAsAction="ifRoom" />
 
     <item
@@ -33,6 +32,5 @@
         android:title="@string/select"
         android:icon="@drawable/ic_check_white"
         android:orderInCategory="100"
-        android:enabled="false"
         app:showAsAction="always" />
 </menu>

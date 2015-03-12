@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">SJ Library</string>
-    <string name="image_description">Image</string>
 
     <string name="crash_tip">Sorry, the Application will exit due to an internal error.</string>
 
+    <string name="image_description">Image</string>
+    <string name="image_picker">ImagePicker</string>
+    <string name="image_preview">ImagePreview</string>
     <string name="recent_photos">Recent Photos</string>
     <string name="image_count">photos</string>
 </resources>

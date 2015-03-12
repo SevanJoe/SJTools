@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -58,16 +60,16 @@ public class ImagePickerActivity extends BaseActivity implements
 	public static final int REQUEST_PHOTO = 0;
 	private static final int REQUEST_CAMERA = 1;
 
-    private Toolbar toolbar;
-	private GridView imageGridView;
+    private MenuItem countMenuItem;
+    private GridView imageGridView;
 	private TextView albumTextView;
 	private TextView previewTextView;
+    private RelativeLayout albumLayout;
+
 	private ImagePickLoader imagePickLoader;
 	private ImagePickerAdapter imagePickerAdapter;
 	private AlbumAdapter albumAdapter;
-	private RelativeLayout albumLayout;
 	private ArrayList<ImageModel> selectedImageModels;
-//	private TextView numberTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,13 +88,10 @@ public class ImagePickerActivity extends BaseActivity implements
 
 		imageGridView = (GridView) findViewById(R.id.gv_images);
 		ListView albumListView = (ListView) findViewById(R.id.lv_album);
-//		Button confirmButton = (Button) findViewById(R.id.btn_confirm);
 		albumTextView = (TextView) findViewById(R.id.tv_album);
 		previewTextView = (TextView) findViewById(R.id.tv_preview);
 		albumLayout = (RelativeLayout) findViewById(R.id.rl_album);
-//		numberTextView = (TextView) findViewById(R.id.tv_number);
 
-//		confirmButton.setOnClickListener(this);
 		albumTextView.setOnClickListener(this);
 		previewTextView.setOnClickListener(this);
 
@@ -105,30 +104,62 @@ public class ImagePickerActivity extends BaseActivity implements
 		albumListView.setAdapter(albumAdapter);
 		albumListView.setOnItemClickListener(this);
 
-//		findViewById(R.id.ll_back).setOnClickListener(this);
-
 		imagePickLoader.loadRecentImageList(recentListener);
 		imagePickLoader.loadAlbumList(albumListener);
 	}
 
     private void initViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.imagepicker, menu);
+        countMenuItem = menu.findItem(R.id.action_count);
+        updateSelectCount();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void updateSelectCount() {
+        countMenuItem.setTitle(String.format(getString(R.string.select_count),
+                selectedImageModels.size(), maxCount));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home || id == R.id.action_select) {
+            select();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void select() {
+        if (selectedImageModels.isEmpty()) {
+            setResult(RESULT_CANCELED);
+        } else {
+            Intent data = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("imageModelList", selectedImageModels);
+            data.putExtras(bundle);
+            setResult(RESULT_OK, data);
+        }
+        finish();
+    }
+
+    @Override
 	public void onClick(View v) {
-//		if (v.getId() == R.id.btn_confirm)
-//			ok();
 		if (v.getId() == R.id.tv_album)
 			album();
 		else if (v.getId() == R.id.tv_preview)
 			preview();
 		else if (v.getId() == R.id.tv_camera_vc)
 			catchPicture();
-//		else if (v.getId() == R.id.ll_back)
-//			finish();
 	}
 
 	private void catchPicture() {
@@ -150,21 +181,8 @@ public class ImagePickerActivity extends BaseActivity implements
 					selectedImageModels.add(photoModel);
 				}
 			}
-			ok();
+			select();
 		}
-	}
-
-	private void ok() {
-		if (selectedImageModels.isEmpty()) {
-			setResult(RESULT_CANCELED);
-		} else {
-			Intent data = new Intent();
-			Bundle bundle = new Bundle();
-			bundle.putSerializable("imageModelList", selectedImageModels);
-			data.putExtras(bundle);
-			setResult(RESULT_OK, data);
-		}
-		finish();
 	}
 
 	private void preview() {
@@ -223,7 +241,7 @@ public class ImagePickerActivity extends BaseActivity implements
 
 		if (selectedImageModels.isEmpty()) {
 			previewTextView.setEnabled(false);
-			previewTextView.setText("Ԥ��");
+			previewTextView.setText(getString(R.string.preview));
 		}
 	}
 

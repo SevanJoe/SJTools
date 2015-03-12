@@ -38,6 +38,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+/**
+ * Created by Sevan Joe on 3/8/2015.
+ */
 public class HomeActivity extends ActionBarActivity {
 
     @InjectView(R.id.drawer_layout)
@@ -45,11 +48,11 @@ public class HomeActivity extends ActionBarActivity {
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
 
-    @OnClick(R.id.test_crash) void testCrash() {
+    @OnClick(R.id.test_hello)
+    void testHello() {
         Intent intent = new Intent(this, PhotoSelectorActivity.class);
         intent.putExtra(PhotoSelectorActivity.KEY_MAX, 4);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//        context.startActivityForResult(intent, requestCode);
         startActivity(intent);
     }
 

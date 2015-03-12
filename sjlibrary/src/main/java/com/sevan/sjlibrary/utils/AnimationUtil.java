@@ -28,19 +28,19 @@ import android.view.animation.TranslateAnimation;
 /**
  * Created by Sevan Joe on 3/11/2015.
  */
-public class AnimationUtils implements AnimationListener {
+public class AnimationUtil implements AnimationListener {
 
     private Animation animation;
     private OnAnimationEndListener animationEndListener;
     private OnAnimationStartListener animationStartListener;
     private OnAnimationRepeatListener animationRepeatListener;
 
-    public AnimationUtils(Context context, int resId) {
+    public AnimationUtil(Context context, int resId) {
         this.animation = android.view.animation.AnimationUtils.loadAnimation(context, resId);
         this.animation.setAnimationListener(this);
     }
 
-    public AnimationUtils(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta) {
+    public AnimationUtil(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta) {
         animation = new TranslateAnimation(fromXDelta, toXDelta, fromYDelta, toYDelta);
     }
 
@@ -49,17 +49,17 @@ public class AnimationUtils implements AnimationListener {
         ((AnimationDrawable) view.getBackground()).start();
     }
 
-    public AnimationUtils setStartOffSet(long startOffset) {
+    public AnimationUtil setStartOffSet(long startOffset) {
         animation.setStartOffset(startOffset);
         return this;
     }
 
-    public AnimationUtils setInterpolator(Interpolator i) {
+    public AnimationUtil setInterpolator(Interpolator i) {
         animation.setInterpolator(i);
         return this;
     }
 
-    public AnimationUtils setLinearInterpolator() {
+    public AnimationUtil setLinearInterpolator() {
         animation.setInterpolator(new LinearInterpolator());
         return this;
     }
@@ -68,29 +68,29 @@ public class AnimationUtils implements AnimationListener {
         view.startAnimation(animation);
     }
 
-    public AnimationUtils setDuration(long durationMillis) {
+    public AnimationUtil setDuration(long durationMillis) {
         animation.setDuration(durationMillis);
         return this;
     }
 
-    public AnimationUtils setFillAfter(boolean fillAfter) {
+    public AnimationUtil setFillAfter(boolean fillAfter) {
         animation.setFillAfter(fillAfter);
         return this;
     }
 
-    public AnimationUtils setOnAnimationEndLinstener(
+    public AnimationUtil setOnAnimationEndLinstener(
             OnAnimationEndListener listener) {
         this.animationEndListener = listener;
         return this;
     }
 
-    public AnimationUtils setOnAnimationStartLinstener(
+    public AnimationUtil setOnAnimationStartLinstener(
             OnAnimationStartListener listener) {
         this.animationStartListener = listener;
         return this;
     }
 
-    public AnimationUtils setOnAnimationRepeatLinstener(
+    public AnimationUtil setOnAnimationRepeatLinstener(
             OnAnimationRepeatListener listener) {
         this.animationRepeatListener = listener;
         return this;

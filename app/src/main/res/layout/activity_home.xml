@@ -29,7 +29,7 @@
                     android:text="@string/hello_world"/>
 
                 <Button
-                    android:id="@+id/test_crash"
+                    android:id="@+id/test_hello"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/hello_world"/>

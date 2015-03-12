@@ -30,7 +30,7 @@ import com.sevan.sjlibrary.imagepicker.view.PhotoSelectorActivity;
 /**
  * Created by Sevan Joe on 3/11/2015.
  */
-public class CommonUtils {
+public class CommonUtil {
 
     public static void launchActivity(Context context, Class<?> activity) {
         Intent intent = new Intent(context, activity);

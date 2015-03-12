@@ -27,12 +27,12 @@ import java.util.List;
 /**
  * Created by Sevan Joe on 3/11/2015.
  */
-public class MBaseAdapter<T> extends BaseAdapter {
+public class ImageBaseAdapter<T> extends BaseAdapter {
 
 	protected Context context;
 	protected ArrayList<T> models;
 
-	public MBaseAdapter(Context context, ArrayList<T> models) {
+	public ImageBaseAdapter(Context context, ArrayList<T> models) {
 		this.context = context;
 		if (models == null) {
             this.models = new ArrayList<>();
@@ -69,8 +69,9 @@ public class MBaseAdapter<T> extends BaseAdapter {
      * @param models models
      */
 	public void update(List<T> models) {
-		if (models == null)
+		if (models == null) {
 			return;
+		}
 		this.models.clear();
 		for (T t : models) {
 			this.models.add(t);
@@ -81,5 +82,4 @@ public class MBaseAdapter<T> extends BaseAdapter {
 	public ArrayList<T> getItems() {
 		return models;
 	}
-
 }

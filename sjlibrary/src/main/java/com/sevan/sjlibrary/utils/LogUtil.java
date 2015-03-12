@@ -23,7 +23,7 @@ import com.sevan.sjlibrary.BuildConfig;
 /**
  * Created by Sevan Joe on 3/11/2015.
  */
-public class LogUtils {
+public class LogUtil {
 
     private static final String TAG = "SJ Library";
 

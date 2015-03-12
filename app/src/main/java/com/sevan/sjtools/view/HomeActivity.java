@@ -47,6 +47,7 @@ public class HomeActivity extends ActionBarActivity {
     DrawerLayout drawerLayout;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    private ActionBarDrawerToggle drawerToggle;
 
     @OnClick(R.id.test_hello)
     void testHello() {
@@ -55,8 +56,6 @@ public class HomeActivity extends ActionBarActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
-
-    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

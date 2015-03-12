@@ -22,6 +22,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -30,15 +31,18 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
-import com.sevan.sjlibrary.polites.GestureImageView;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by Sevan Joe on 2015/3/12.
  */
 public class ImagePreview extends LinearLayout implements OnClickListener {
 
-	private ProgressBar loadingProgressBar;
-	private GestureImageView gestureImageView;
+	private ProgressBar progressBar;
+	private ImageView imageView;
+
+	private PhotoViewAttacher photoViewAttacher;
 
 	private OnClickListener onClickListener;
 
@@ -54,9 +58,10 @@ public class ImagePreview extends LinearLayout implements OnClickListener {
 	private void init(Context context) {
 		LayoutInflater.from(context).inflate(R.layout.view_imagepreview, this, true);
 
-		loadingProgressBar = (ProgressBar) findViewById(R.id.pb_loading);
-		gestureImageView = (GestureImageView) findViewById(R.id.iv_content);
-		gestureImageView.setOnClickListener(this);
+		progressBar = (ProgressBar) findViewById(R.id.pb_loading);
+		imageView = (ImageView) findViewById(R.id.iv_content);
+		imageView.setOnClickListener(this);
+		photoViewAttacher = new PhotoViewAttacher(imageView);
 	}
 
 	public void loadImage(ImageModel imageModel) {
@@ -67,14 +72,16 @@ public class ImagePreview extends LinearLayout implements OnClickListener {
 		ImageLoader.getInstance().loadImage(path, new SimpleImageLoadingListener() {
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				gestureImageView.setImageBitmap(loadedImage);
-				loadingProgressBar.setVisibility(View.GONE);
+				imageView.setImageBitmap(loadedImage);
+				photoViewAttacher.update();
+				progressBar.setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-				gestureImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_picture_loadfailed));
-				loadingProgressBar.setVisibility(View.GONE);
+				imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_picture_loadfailed));
+				photoViewAttacher.update();
+				progressBar.setVisibility(View.GONE);
 			}
 		});
 	}
@@ -87,6 +94,6 @@ public class ImagePreview extends LinearLayout implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (null != onClickListener && v.getId() == R.id.iv_content)
-			onClickListener.onClick(gestureImageView);
+			onClickListener.onClick(imageView);
 	}
 }

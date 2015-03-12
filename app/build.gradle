@@ -23,5 +23,4 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':sjlibrary')
     compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
 }

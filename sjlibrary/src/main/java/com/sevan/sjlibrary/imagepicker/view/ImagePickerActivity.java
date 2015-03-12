@@ -19,7 +19,6 @@ package com.sevan.sjlibrary.imagepicker.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sevan.sjlibrary.R;
+import com.sevan.sjlibrary.base.BaseActivity;
 import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.controller.OnAlbumLoadListener;
 import com.sevan.sjlibrary.imagepicker.controller.OnImageLoadListener;
@@ -47,7 +47,7 @@ import java.util.List;
 /**
  * Created by Sevan Joe on 2015/3/12.
  */
-public class ImagePickerActivity extends ActionBarActivity implements
+public class ImagePickerActivity extends BaseActivity implements
 		ImageItem.OnImageClickListener, ImageItem.OnImageCheckChangedListener,
         OnItemClickListener, OnClickListener {
 

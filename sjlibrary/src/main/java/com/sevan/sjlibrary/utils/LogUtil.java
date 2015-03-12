@@ -25,23 +25,23 @@ import com.sevan.sjlibrary.BuildConfig;
  */
 public class LogUtil {
 
-    private static final String TAG = "SJ Library";
+	private static final String TAG = "SJ Library";
 
-    public static void d(String debugInfo) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, debugInfo);
-        }
-    }
+	public static void d(String debugInfo) {
+		if (BuildConfig.DEBUG) {
+			Log.d(TAG, debugInfo);
+		}
+	}
 
-    public static void e(String errorInfo) {
-        if (BuildConfig.DEBUG) {
-            Log.e(TAG, errorInfo);
-        }
-    }
+	public static void e(String errorInfo) {
+		if (BuildConfig.DEBUG) {
+			Log.e(TAG, errorInfo);
+		}
+	}
 
-    public static void e(String errorInfo, Throwable throwable) {
-        if (BuildConfig.DEBUG) {
-            Log.e(TAG, errorInfo, throwable);
-        }
-    }
+	public static void e(String errorInfo, Throwable throwable) {
+		if (BuildConfig.DEBUG) {
+			Log.e(TAG, errorInfo, throwable);
+		}
+	}
 }

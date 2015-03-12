@@ -26,27 +26,28 @@ import java.io.File;
  */
 public class FileUtil {
 
-    private static boolean isExternalMounted() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-    }
+	private static boolean isExternalMounted() {
+		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+	}
 
-    /**
-     * get external file directory of the application
-     * @param context context
-     * @return path of the directory
-     */
-    public static String getExternalFileDir(Context context) {
-        if (!isExternalMounted()) {
-            return null;
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        File file = context.getExternalCacheDir();
-        if (null != file) {
-            stringBuilder.append(file.getAbsolutePath()).append(File.separator);
-        } else {
-            stringBuilder.append(Environment.getExternalStorageDirectory().getParent()).append("/Android/data/")
-                    .append(context.getPackageName()).append("/files").append(File.separator);
-        }
-        return stringBuilder.toString();
-    }
+	/**
+	 * get external file directory of the application
+	 *
+	 * @param context context
+	 * @return path of the directory
+	 */
+	public static String getExternalFileDir(Context context) {
+		if (!isExternalMounted()) {
+			return null;
+		}
+		StringBuilder stringBuilder = new StringBuilder();
+		File file = context.getExternalCacheDir();
+		if (null != file) {
+			stringBuilder.append(file.getAbsolutePath()).append(File.separator);
+		} else {
+			stringBuilder.append(Environment.getExternalStorageDirectory().getParent()).append("/Android/data/")
+					.append(context.getPackageName()).append("/files").append(File.separator);
+		}
+		return stringBuilder.toString();
+	}
 }

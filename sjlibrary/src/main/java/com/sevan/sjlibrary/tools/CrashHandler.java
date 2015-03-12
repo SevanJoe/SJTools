@@ -47,130 +47,129 @@ import java.util.Map;
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
-    private Thread.UncaughtExceptionHandler defaultHandler;
-    private Context context;
-    private Map<String, String> infoMap = new HashMap<>();
+	private static CrashHandler INSTANCE = new CrashHandler();
+	private Thread.UncaughtExceptionHandler defaultHandler;
+	private Context context;
+	private Map<String, String> infoMap = new HashMap<>();
+	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss", Locale.getDefault());
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss", Locale.getDefault());
+	private CrashHandler() {
+	}
 
-    private static CrashHandler INSTANCE = new CrashHandler();
+	public static CrashHandler getInstance() {
+		return INSTANCE;
+	}
 
-    private CrashHandler() {
-    }
+	/**
+	 * register CrashHandler with context
+	 *
+	 * @param context context
+	 */
+	public void init(Context context) {
+		this.context = context;
+		defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+		Thread.setDefaultUncaughtExceptionHandler(this);
+	}
 
-    public static CrashHandler getInstance() {
-        return INSTANCE;
-    }
+	@Override
+	public void uncaughtException(Thread thread, Throwable ex) {
+		if (!handleException(ex) && defaultHandler != null) {
+			defaultHandler.uncaughtException(thread, ex);
+		} else {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				LogUtil.e("error: ", e);
+			}
 
-    /**
-     * register CrashHandler with context
-     * @param context context
-     */
-    public void init(Context context) {
-        this.context = context;
-        defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(this);
-    }
+			android.os.Process.killProcess(Process.myPid());
+			System.exit(1);
+		}
+	}
 
-    @Override
-    public void uncaughtException(Thread thread, Throwable ex) {
-        if (!handleException(ex) && defaultHandler != null) {
-            defaultHandler.uncaughtException(thread, ex);
-        } else {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                LogUtil.e("error: ", e);
-            }
+	private boolean handleException(Throwable ex) {
+		if (null == ex) {
+			return false;
+		}
+		new Thread() {
+			@Override
+			public void run() {
+				Looper.prepare();
+				// display exception
+				Toast.makeText(context, context.getString(R.string.crash_tip), Toast.LENGTH_LONG).show();
+				Looper.loop();
+			}
+		}.start();
 
-            android.os.Process.killProcess(Process.myPid());
-            System.exit(1);
-        }
-    }
+		collectCrashInfo();
+		showCrashInfo(ex);
+		return true;
+	}
 
-    private boolean handleException(Throwable ex) {
-        if (null == ex) {
-            return  false;
-        }
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                // display exception
-                Toast.makeText(context, context.getString(R.string.crash_tip), Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
-        }.start();
+	private void collectCrashInfo() {
+		PackageManager packageManager = context.getPackageManager();
+		try {
+			PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+			if (null != packageInfo) {
+				String versionName = packageInfo.versionName == null ? "null" : packageInfo.versionName;
+				String versionCode = String.valueOf(packageInfo.versionCode);
+				infoMap.put("versionName", versionName);
+				infoMap.put("versionCode", versionCode);
+			}
+		} catch (PackageManager.NameNotFoundException e) {
+			LogUtil.e("error occurred during collect package info");
+		}
+		Field[] fields = Build.class.getDeclaredFields();
+		for (Field field : fields) {
+			field.setAccessible(true);
+			try {
+				infoMap.put(field.getName(), field.get(null).toString());
+			} catch (IllegalAccessException e) {
+				LogUtil.e("error occurred during collect crash info");
+			}
+		}
+	}
 
-        collectCrashInfo();
-        showCrashInfo(ex);
-        return true;
-    }
+	private void showCrashInfo(Throwable ex) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (Map.Entry<String, String> entry : infoMap.entrySet()) {
+			stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+		}
 
-    private void collectCrashInfo() {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
-            if (null != packageInfo) {
-                String versionName = packageInfo.versionName == null ? "null" : packageInfo.versionName;
-                String versionCode = String.valueOf(packageInfo.versionCode);
-                infoMap.put("versionName", versionName);
-                infoMap.put("versionCode", versionCode);
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            LogUtil.e("error occurred during collect package info");
-        }
-        Field[] fields = Build.class.getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            try {
-                infoMap.put(field.getName(), field.get(null).toString());
-            } catch (IllegalAccessException e) {
-                LogUtil.e("error occurred during collect crash info");
-            }
-        }
-    }
+		Writer writer = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(writer);
+		ex.printStackTrace(printWriter);
+		Throwable cause = ex.getCause();
+		while (null != cause) {
+			cause.printStackTrace(printWriter);
+			cause = cause.getCause();
+		}
+		printWriter.close();
+		stringBuilder.append(writer.toString());
 
-    private void showCrashInfo(Throwable ex) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Map.Entry<String, String> entry : infoMap.entrySet()) {
-            stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
-        }
+		// save crash info
+		saveToFile(stringBuilder.toString());
+	}
 
-        Writer writer = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(writer);
-        ex.printStackTrace(printWriter);
-        Throwable cause = ex.getCause();
-        while (null != cause) {
-            cause.printStackTrace(printWriter);
-            cause = cause.getCause();
-        }
-        printWriter.close();
-        stringBuilder.append(writer.toString());
-
-        // save crash info
-        saveToFile(stringBuilder.toString());
-    }
-
-    private void saveToFile(String string) {
-        String time = dateFormat.format(new Date());
-        String fileName = "crash-" + time + ".log";
-        String filePath = FileUtil.getExternalFileDir(context);
-        if (null != filePath) {
-            filePath += "/log/";
-            File dir = new File(filePath);
-            if (!dir.exists()) {
-                if (!dir.mkdir()) {
-                    return;
-                }
-            }
-            try {
-                FileOutputStream fileOutputStream = new FileOutputStream(filePath + fileName);
-                fileOutputStream.write(string.getBytes());
-                fileOutputStream.close();
-            } catch (IOException e) {
-                LogUtil.e(e.getMessage());
-            }
-        }
-    }
+	private void saveToFile(String string) {
+		String time = dateFormat.format(new Date());
+		String fileName = "crash-" + time + ".log";
+		String filePath = FileUtil.getExternalFileDir(context);
+		if (null != filePath) {
+			filePath += "/log/";
+			File dir = new File(filePath);
+			if (!dir.exists()) {
+				if (!dir.mkdir()) {
+					return;
+				}
+			}
+			try {
+				FileOutputStream fileOutputStream = new FileOutputStream(filePath + fileName);
+				fileOutputStream.write(string.getBytes());
+				fileOutputStream.close();
+			} catch (IOException e) {
+				LogUtil.e(e.getMessage());
+			}
+		}
+	}
 }

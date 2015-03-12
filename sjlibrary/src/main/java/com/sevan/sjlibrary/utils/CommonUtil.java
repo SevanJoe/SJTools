@@ -91,9 +91,10 @@ public class CommonUtil {
      * @return true null false !null
      */
     public static boolean isNull(CharSequence text) {
-        if (text == null || "".equals(text.toString().trim()) || "null".equals(text))
-            return true;
-        return false;
+	    if (text == null || "".equals(text.toString().trim()) || "null".equals(text)) {
+		    return true;
+	    }
+	    return false;
     }
 
     /**
@@ -103,9 +104,9 @@ public class CommonUtil {
      * @return screen width
      */
     public static int getWidthPixels(Activity activity) {
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.widthPixels;
+	    DisplayMetrics displayMetrics = new DisplayMetrics();
+	    activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+	    return displayMetrics.widthPixels;
     }
 
     /**
@@ -115,9 +116,9 @@ public class CommonUtil {
      * @return screen height
      */
     public static int getHeightPixels(Activity activity) {
-        DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        return dm.heightPixels;
+	    DisplayMetrics displayMetrics = new DisplayMetrics();
+	    activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+	    return displayMetrics.heightPixels;
     }
 
     /**
@@ -134,5 +135,4 @@ public class CommonUtil {
         cursor.close();
         return path;
     }
-
 }

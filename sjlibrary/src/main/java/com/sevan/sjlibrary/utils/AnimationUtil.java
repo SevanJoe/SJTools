@@ -121,16 +121,15 @@ public class AnimationUtil implements AnimationListener {
         }
     }
 
-    public interface OnAnimationEndListener {
-        void onAnimationEnd(Animation animation);
-    }
+	public interface OnAnimationStartListener {
+		void onAnimationStart(Animation animation);
+	}
 
-    public interface OnAnimationStartListener {
-        void onAnimationStart(Animation animation);
+	public interface OnAnimationEndListener {
+        void onAnimationEnd(Animation animation);
     }
 
     public interface OnAnimationRepeatListener {
         void onAnimationRepeat(Animation animation);
     }
-
 }

@@ -32,61 +32,64 @@ import android.widget.TextView;
 
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
-import com.sevan.sjlibrary.utils.AnimationUtils;
+import com.sevan.sjlibrary.utils.AnimationUtil;
 
 import java.util.List;
 
+/**
+ * Created by Sevan Joe on 2015/3/12.
+ */
+public class BaseImagePreviewActivity extends Activity implements OnPageChangeListener, OnClickListener {
 
-public class BasePhotoPreviewActivity extends Activity implements OnPageChangeListener, OnClickListener {
+	private ViewPager viewPager;
+	private RelativeLayout topLayout;
+	private TextView percentTextView;
 
-	private ViewPager mViewPager;
-	private RelativeLayout layoutTop;
-	private ImageButton btnBack;
-	private TextView tvPercent;
-	protected List<ImageModel> photos;
-	protected int current;
+	protected List<ImageModel> imageModelList;
+
+	protected int currentIndex;
+	protected boolean isUp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);// ȥ��������
-		setContentView(R.layout.activity_photopreview);
-		layoutTop = (RelativeLayout) findViewById(R.id.layout_top_app);
-		btnBack = (ImageButton) findViewById(R.id.btn_back_app);
-		tvPercent = (TextView) findViewById(R.id.tv_percent_app);
-		mViewPager = (ViewPager) findViewById(R.id.vp_base_app);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_imagepreview);
 
-		btnBack.setOnClickListener(this);
-		mViewPager.setOnPageChangeListener(this);
+		topLayout = (RelativeLayout) findViewById(R.id.rl_top);
+		ImageButton backButton = (ImageButton) findViewById(R.id.btn_back);
+		percentTextView = (TextView) findViewById(R.id.tv_percent);
+		viewPager = (ViewPager) findViewById(R.id.vp_base);
 
-		overridePendingTransition(R.anim.activity_alpha_action_in, 0); // ����Ч��
+		backButton.setOnClickListener(this);
+		viewPager.setOnPageChangeListener(this);
 
+		overridePendingTransition(R.anim.activity_alpha_action_in, 0);
 	}
 
-	/** �����ݣ����½��� */
 	protected void bindData() {
-		mViewPager.setAdapter(mPagerAdapter);
-		mViewPager.setCurrentItem(current);
+		viewPager.setAdapter(mPagerAdapter);
+		viewPager.setCurrentItem(currentIndex);
 	}
 
 	private PagerAdapter mPagerAdapter = new PagerAdapter() {
 
 		@Override
 		public int getCount() {
-			if (photos == null) {
+			if (imageModelList == null) {
 				return 0;
 			} else {
-				return photos.size();
+				return imageModelList.size();
 			}
 		}
 
 		@Override
 		public View instantiateItem(final ViewGroup container, final int position) {
-			PhotoPreview photoPreview = new PhotoPreview(getApplicationContext());
-			((ViewPager) container).addView(photoPreview);
-			photoPreview.loadImage(photos.get(position));
-			photoPreview.setOnClickListener(photoItemClickListener);
-			return photoPreview;
+			ImagePreview imagePreview = new ImagePreview(getApplicationContext());
+			container.addView(imagePreview);
+			imagePreview.loadImage(imageModelList.get(position));
+			imagePreview.setOnClickListener(imageItemOnClickListener);
+			return imagePreview;
 		}
 
 		@Override
@@ -100,12 +103,12 @@ public class BasePhotoPreviewActivity extends Activity implements OnPageChangeLi
 		}
 
 	};
-	protected boolean isUp;
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.btn_back_app)
+		if (v.getId() == R.id.btn_back) {
 			finish();
+		}
 	}
 
 	@Override
@@ -120,25 +123,24 @@ public class BasePhotoPreviewActivity extends Activity implements OnPageChangeLi
 
 	@Override
 	public void onPageSelected(int arg0) {
-		current = arg0;
+		currentIndex = arg0;
 		updatePercent();
 	}
 
 	protected void updatePercent() {
-		tvPercent.setText((current + 1) + "/" + photos.size());
+		percentTextView.setText((currentIndex + 1) + "/" + imageModelList.size());
 	}
 
-	/** ͼƬ����¼��ص� */
-	private OnClickListener photoItemClickListener = new OnClickListener() {
+	private OnClickListener imageItemOnClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			if (!isUp) {
-				new AnimationUtils(getApplicationContext(), R.anim.translate_up)
-						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
+				new AnimationUtil(getApplicationContext(), R.anim.translate_up)
+						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(topLayout);
 				isUp = true;
 			} else {
-				new AnimationUtils(getApplicationContext(), R.anim.translate_down_current)
-						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(layoutTop);
+				new AnimationUtil(getApplicationContext(), R.anim.translate_down_current)
+						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(topLayout);
 				isUp = false;
 			}
 		}

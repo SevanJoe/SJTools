@@ -18,52 +18,54 @@ package com.sevan.sjlibrary.imagepicker.view;
 
 import android.os.Bundle;
 
+import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
+import com.sevan.sjlibrary.imagepicker.controller.OnImageLoadListener;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
-import com.sevan.sjlibrary.utils.CommonUtils;
+import com.sevan.sjlibrary.utils.CommonUtil;
 
 import java.util.List;
 
+/**
+ * Created by Sevan Joe on 2015/3/12.
+ */
+public class ImagePreviewActivity extends BaseImagePreviewActivity implements OnImageLoadListener {
 
-public class PhotoPreviewActivity extends BasePhotoPreviewActivity implements PhotoSelectorActivity.OnLocalReccentListener {
-
-	private ImagePickLoader photoSelectorDomain;
+	private ImagePickLoader imagePickLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		photoSelectorDomain = new ImagePickLoader(getApplicationContext());
+		imagePickLoader = new ImagePickLoader(getApplicationContext());
 
 		init(getIntent().getExtras());
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void init(Bundle extras) {
 		if (extras == null)
 			return;
 
-		if (extras.containsKey("photos")) { // Ԥ��ͼƬ
-			photos = (List<ImageModel>) extras.getSerializable("photos");
-			current = extras.getInt("position", 0);
+		if (extras.containsKey("imageModelList")) {
+			imageModelList = (List<ImageModel>) extras.getSerializable("imageModelList");
+			currentIndex = extras.getInt("position", 0);
 			updatePercent();
 			bindData();
-		} else if (extras.containsKey("album")) { // ���ͼƬ�鿴
-			String albumName = extras.getString("album"); // ���
-			this.current = extras.getInt("position");
-			if (!CommonUtils.isNull(albumName) && albumName.equals(PhotoSelectorActivity.RECCENT_PHOTO)) {
-				photoSelectorDomain.loadRecentImageList(this);
+		} else if (extras.containsKey("album")) {
+			String albumName = extras.getString("album");
+			this.currentIndex = extras.getInt("position");
+			if (!CommonUtil.isNull(albumName) && albumName.equals(getString(R.string.recent_photos))) {
+				imagePickLoader.loadRecentImageList(this);
 			} else {
-				photoSelectorDomain.getAlbum(albumName, this);
+				imagePickLoader.getAlbum(albumName, this);
 			}
 		}
 	}
 
 	@Override
-	public void onPhotoLoaded(List<ImageModel> photos) {
-		this.photos = photos;
+	public void onImageLoaded(List<ImageModel> photos) {
+		this.imageModelList = photos;
 		updatePercent();
-		bindData(); // ���½���
+		bindData();
 	}
-
 }

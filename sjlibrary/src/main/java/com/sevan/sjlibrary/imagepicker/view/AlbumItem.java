@@ -33,7 +33,7 @@ import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
  */
 public class AlbumItem extends LinearLayout {
 
-	private ImageView albumImageView, indexImageView;
+	private ImageView coverImageView, checkImageView;
 	private TextView nameTextView, countTextView;
 
 	public AlbumItem(Context context) {
@@ -42,28 +42,31 @@ public class AlbumItem extends LinearLayout {
 
 	public AlbumItem(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		LayoutInflater.from(context).inflate(R.layout.layout_album, this, true);
-
-		albumImageView = (ImageView) findViewById(R.id.iv_album_la);
-		indexImageView = (ImageView) findViewById(R.id.iv_index_la);
-		nameTextView = (TextView) findViewById(R.id.tv_name_la);
-		countTextView = (TextView) findViewById(R.id.tv_count_la);
+        init(context);
 	}
 
-	public AlbumItem(Context context, AttributeSet attrs, int defStyle) {
-		this(context, attrs);
-	}
+    private void init(Context context) {
+        LayoutInflater.from(context).inflate(R.layout.layout_album, this, true);
 
-	/** set album cover image*/
+        coverImageView = (ImageView) findViewById(R.id.iv_album_cover);
+        checkImageView = (ImageView) findViewById(R.id.iv_album_check);
+        nameTextView = (TextView) findViewById(R.id.tv_album_name);
+        countTextView = (TextView) findViewById(R.id.tv_album_count);
+    }
+
+    /**
+     * set album cover image
+     * @param path cover image path
+     */
 	public void setAlbumImage(String path) {
-		ImageLoader.getInstance().displayImage("file://" + path, albumImageView);
+		ImageLoader.getInstance().displayImage("file://" + path, coverImageView);
 	}
 
-	public void update(AlbumModel album) {
-		setAlbumImage(album.getRecent());
-		setName(album.getName());
-		setCount(album.getCount());
-		isCheck(album.isCheck());
+	public void update(AlbumModel albumModel) {
+		setAlbumImage(albumModel.getRecent());
+		setName(albumModel.getName());
+		setCount(albumModel.getCount());
+		isCheck(albumModel.isCheck());
 	}
 
 	public void setName(CharSequence title) {
@@ -71,14 +74,14 @@ public class AlbumItem extends LinearLayout {
 	}
 
 	public void setCount(int count) {
-		countTextView.setHint(count + "��");
+		countTextView.setHint(count + getContext().getString(R.string.image_count));
 	}
 
 	public void isCheck(boolean isCheck) {
-		if (isCheck)
-			indexImageView.setVisibility(View.VISIBLE);
-		else
-			indexImageView.setVisibility(View.GONE);
+		if (isCheck) {
+            checkImageView.setVisibility(View.VISIBLE);
+        } else {
+            checkImageView.setVisibility(View.GONE);
+        }
 	}
-
 }

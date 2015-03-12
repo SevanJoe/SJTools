@@ -78,8 +78,4 @@ public class ImageBaseAdapter<T> extends BaseAdapter {
 		}
 		notifyDataSetChanged();
 	}
-
-	public ArrayList<T> getItems() {
-		return models;
-	}
 }

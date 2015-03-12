@@ -31,80 +31,80 @@ import java.util.List;
  */
 public class ImagePickLoader {
 
-    private AlbumController albumController;
+	private AlbumController albumController;
 
-    public ImagePickLoader(Context context) {
-        albumController = new AlbumController(context);
-    }
+	public ImagePickLoader(Context context) {
+		albumController = new AlbumController(context);
+	}
 
-    public void loadRecentImageList(OnImageLoadListener onImageLoadListener) {
-        final ImageHandler imageHandler = new ImageHandler(onImageLoadListener);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<ImageModel> imageModelList = albumController.getRecentImageList();
-                Message msg = new Message();
-                msg.obj = imageModelList;
-                imageHandler.sendMessage(msg);
-            }
-        }).start();
-    }
+	public void loadRecentImageList(OnImageLoadListener onImageLoadListener) {
+		final ImageHandler imageHandler = new ImageHandler(onImageLoadListener);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				List<ImageModel> imageModelList = albumController.getRecentImageList();
+				Message msg = new Message();
+				msg.obj = imageModelList;
+				imageHandler.sendMessage(msg);
+			}
+		}).start();
+	}
 
-    public void loadAlbumList(OnAlbumLoadListener onAlbumLoadListener) {
-        final AlbumHandler albumHandler = new AlbumHandler(onAlbumLoadListener);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<AlbumModel> albumModelList = albumController.getAlbumList();
-                Message msg = new Message();
-                msg.obj = albumModelList;
-                albumHandler.sendMessage(msg);
-            }
-        }).start();
-    }
+	public void loadAlbumList(OnAlbumLoadListener onAlbumLoadListener) {
+		final AlbumHandler albumHandler = new AlbumHandler(onAlbumLoadListener);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				List<AlbumModel> albumModelList = albumController.getAlbumList();
+				Message msg = new Message();
+				msg.obj = albumModelList;
+				albumHandler.sendMessage(msg);
+			}
+		}).start();
+	}
 
-    public void getAlbum(final String name, OnImageLoadListener onImageLoadListener) {
-        final ImageHandler imageHandler = new ImageHandler(onImageLoadListener);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<ImageModel> imageModelList = albumController.getImageListByAlbum(name);
-                Message msg = new Message();
-                msg.obj = imageModelList;
-                imageHandler.sendMessage(msg);
-            }
-        }).start();
-    }
+	public void getAlbum(final String name, OnImageLoadListener onImageLoadListener) {
+		final ImageHandler imageHandler = new ImageHandler(onImageLoadListener);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				List<ImageModel> imageModelList = albumController.getImageListByAlbum(name);
+				Message msg = new Message();
+				msg.obj = imageModelList;
+				imageHandler.sendMessage(msg);
+			}
+		}).start();
+	}
 
-    private static class AlbumHandler extends Handler {
-        private final WeakReference<OnAlbumLoadListener> onAlbumLoadListener;
+	private static class AlbumHandler extends Handler {
+		private final WeakReference<OnAlbumLoadListener> onAlbumLoadListener;
 
-        public AlbumHandler(OnAlbumLoadListener albumLoadListener) {
-            this.onAlbumLoadListener = new WeakReference<>(albumLoadListener);
-        }
+		public AlbumHandler(OnAlbumLoadListener albumLoadListener) {
+			this.onAlbumLoadListener = new WeakReference<>(albumLoadListener);
+		}
 
-        @Override
-        public void handleMessage(Message msg) {
-            OnAlbumLoadListener albumLoadListener = onAlbumLoadListener.get();
-            if (null != albumLoadListener) {
-                albumLoadListener.onAlbumLoaded((List<AlbumModel>) msg.obj);
-            }
-        }
-    }
+		@Override
+		public void handleMessage(Message msg) {
+			OnAlbumLoadListener albumLoadListener = onAlbumLoadListener.get();
+			if (null != albumLoadListener) {
+				albumLoadListener.onAlbumLoaded((List<AlbumModel>) msg.obj);
+			}
+		}
+	}
 
-    private static class ImageHandler extends Handler {
-        private final WeakReference<OnImageLoadListener> onImageLoadListener;
+	private static class ImageHandler extends Handler {
+		private final WeakReference<OnImageLoadListener> onImageLoadListener;
 
-        public ImageHandler(OnImageLoadListener imageLoadListener) {
-            this.onImageLoadListener = new WeakReference<>(imageLoadListener);
-        }
+		public ImageHandler(OnImageLoadListener imageLoadListener) {
+			this.onImageLoadListener = new WeakReference<>(imageLoadListener);
+		}
 
-        @Override
-        public void handleMessage(Message msg) {
-            OnImageLoadListener imageLoadListener = onImageLoadListener.get();
-            if (null != imageLoadListener) {
-                imageLoadListener.onImageLoaded((List<ImageModel>) msg.obj);
-            }
-        }
-    }
+		@Override
+		public void handleMessage(Message msg) {
+			OnImageLoadListener imageLoadListener = onImageLoadListener.get();
+			if (null != imageLoadListener) {
+				imageLoadListener.onImageLoaded((List<ImageModel>) msg.obj);
+			}
+		}
+	}
 }

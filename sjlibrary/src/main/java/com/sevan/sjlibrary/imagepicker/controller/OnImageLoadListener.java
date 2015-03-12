@@ -21,8 +21,8 @@ import com.sevan.sjlibrary.imagepicker.model.ImageModel;
 import java.util.List;
 
 /**
- * Created by Sevan on 2015/3/12 0012.
+ * Created by Sevan Joe on 2015/3/12.
  */
 public interface OnImageLoadListener {
-    void onImageLoaded(List<ImageModel> imageModelList);
+	void onImageLoaded(List<ImageModel> imageModelList);
 }

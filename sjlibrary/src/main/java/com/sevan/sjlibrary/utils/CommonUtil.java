@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.util.DisplayMetrics;
 
-import com.sevan.sjlibrary.imagepicker.view.PhotoSelectorActivity;
+import com.sevan.sjlibrary.imagepicker.view.ImagePickerActivity;
 
 /**
  * Created by Sevan Joe on 3/11/2015.
@@ -65,7 +65,7 @@ public class CommonUtil {
 
     public static void launchActivityForResult(Activity context, Class<?> activity, int requestCode, int maxImage) {
         Intent intent = new Intent(context, activity);
-        intent.putExtra(PhotoSelectorActivity.KEY_MAX, maxImage);
+        intent.putExtra(ImagePickerActivity.KEY_MAX, maxImage);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         context.startActivityForResult(intent, requestCode);
     }

@@ -27,22 +27,22 @@ import java.util.ArrayList;
 /**
  * Created by Sevan Joe on 3/11/2015.
  */
-public class AlbumAdapter extends MBaseAdapter<AlbumModel> {
+public class AlbumAdapter extends ImageBaseAdapter<AlbumModel> {
 
-	public AlbumAdapter(Context context, ArrayList<AlbumModel> models) {
-		super(context, models);
+	public AlbumAdapter(Context context, ArrayList<AlbumModel> albumModels) {
+		super(context, albumModels);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		AlbumItem albumItem = null;
+		AlbumItem albumItem;
 		if (convertView == null) {
 			albumItem = new AlbumItem(context);
 			convertView = albumItem;
-		} else
+		} else {
 			albumItem = (AlbumItem) convertView;
+		}
 		albumItem.update(models.get(position));
 		return convertView;
 	}
-
 }

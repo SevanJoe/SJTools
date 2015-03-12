@@ -31,7 +31,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.sevan.sjlibrary.imagepicker.view.PhotoSelectorActivity;
+import com.sevan.sjlibrary.imagepicker.view.ImagePickerActivity;
 import com.sevan.sjtools.R;
 
 import butterknife.ButterKnife;
@@ -50,8 +50,8 @@ public class HomeActivity extends ActionBarActivity {
 
     @OnClick(R.id.test_hello)
     void testHello() {
-        Intent intent = new Intent(this, PhotoSelectorActivity.class);
-        intent.putExtra(PhotoSelectorActivity.KEY_MAX, 4);
+        Intent intent = new Intent(this, ImagePickerActivity.class);
+        intent.putExtra(ImagePickerActivity.KEY_MAX, 4);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }

@@ -27,56 +27,51 @@ import com.sevan.sjlibrary.imagepicker.model.ImageModel;
 
 import java.util.ArrayList;
 
-
 /**
- * 
- * @author Aizaz AZ
- *
+ * Created by Sevan Joe on 2015/3/12.
  */
+public class ImagePickerAdapter extends ImageBaseAdapter<ImageModel> {
 
+	private static final int HORIZONTAL_NUM = 3;
 
-public class PhotoSelectorAdapter extends MBaseAdapter<ImageModel> {
-
-	private int itemWidth;
-	private int horizentalNum = 3;
-	private PhotoItem.onPhotoItemCheckedListener listener;
+	private ImageItem.OnImageCheckChangedListener listener;
 	private LayoutParams itemLayoutParams;
-	private PhotoItem.onItemClickListener mCallback;
+	private ImageItem.OnImageClickListener callback;
 	private OnClickListener cameraListener;
 
-	private PhotoSelectorAdapter(Context context, ArrayList<ImageModel> models) {
+	private ImagePickerAdapter(Context context, ArrayList<ImageModel> models) {
 		super(context, models);
 	}
 
-	public PhotoSelectorAdapter(Context context, ArrayList<ImageModel> models, int screenWidth, PhotoItem.onPhotoItemCheckedListener listener, PhotoItem.onItemClickListener mCallback,
-			OnClickListener cameraListener) {
-		this(context, models);
+	public ImagePickerAdapter(Context context, ArrayList<ImageModel> imageModels, int screenWidth,
+	                          ImageItem.OnImageCheckChangedListener listener, ImageItem.OnImageClickListener callback,
+	                          OnClickListener cameraListener) {
+		this(context, imageModels);
 		setItemWidth(screenWidth);
 		this.listener = listener;
-		this.mCallback = mCallback;
+		this.callback = callback;
 		this.cameraListener = cameraListener;
 	}
 
-	/** ����ÿһ��Item�Ŀ�� */
 	public void setItemWidth(int screenWidth) {
-		int horizentalSpace = context.getResources().getDimensionPixelSize(R.dimen.sticky_item_horizontalSpacing);
-		this.itemWidth = (screenWidth - (horizentalSpace * (horizentalNum - 1))) / horizentalNum;
+		int horizontalSpace = context.getResources().getDimensionPixelSize(R.dimen.sticky_item_horizontal_spacing);
+		int itemWidth = (screenWidth - (horizontalSpace * (HORIZONTAL_NUM - 1))) / HORIZONTAL_NUM;
 		this.itemLayoutParams = new LayoutParams(itemWidth, itemWidth);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		PhotoItem item = null;
-		if (convertView == null || !(convertView instanceof PhotoItem)) {
-			item = new PhotoItem(context, listener);
+		ImageItem item;
+		if (null == convertView || !(convertView instanceof ImageItem)) {
+			item = new ImageItem(context, listener);
 			item.setLayoutParams(itemLayoutParams);
 			convertView = item;
 		} else {
-			item = (PhotoItem) convertView;
+			item = (ImageItem) convertView;
 		}
 		item.setImageDrawable(models.get(position));
 		item.setSelected(models.get(position).isChecked());
-		item.setOnClickListener(mCallback, position);
+		item.setOnClickListener(callback, position);
 		return convertView;
 	}
 }

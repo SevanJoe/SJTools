@@ -4,16 +4,18 @@
     android:layout_height="match_parent" >
 
     <ImageView
-        android:id="@+id/iv_photo_lpsi"
+        android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/image_description"/>
 
     <CheckBox
-        android:id="@+id/cb_photo_lpsi"
+        android:id="@+id/cb_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/btn_checkbox_selector"
         android:button="@null" />

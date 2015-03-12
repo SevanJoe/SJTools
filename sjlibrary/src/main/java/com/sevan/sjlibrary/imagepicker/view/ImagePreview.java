@@ -32,58 +32,61 @@ import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
 import com.sevan.sjlibrary.polites.GestureImageView;
 
-public class PhotoPreview extends LinearLayout implements OnClickListener {
+/**
+ * Created by Sevan Joe on 2015/3/12.
+ */
+public class ImagePreview extends LinearLayout implements OnClickListener {
 
-	private ProgressBar pbLoading;
-	private GestureImageView ivContent;
-	private OnClickListener l;
+	private ProgressBar loadingProgressBar;
+	private GestureImageView gestureImageView;
 
-	public PhotoPreview(Context context) {
-		super(context);
-		LayoutInflater.from(context).inflate(R.layout.view_photopreview, this, true);
+	private OnClickListener onClickListener;
 
-		pbLoading = (ProgressBar) findViewById(R.id.pb_loading_vpp);
-		ivContent = (GestureImageView) findViewById(R.id.iv_content_vpp);
-		ivContent.setOnClickListener(this);
+	public ImagePreview(Context context) {
+		this(context, null);
 	}
 
-	public PhotoPreview(Context context, AttributeSet attrs, int defStyle) {
-		this(context);
+	public ImagePreview(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init(context);
 	}
 
-	public PhotoPreview(Context context, AttributeSet attrs) {
-		this(context);
+	private void init(Context context) {
+		LayoutInflater.from(context).inflate(R.layout.view_imagepreview, this, true);
+
+		loadingProgressBar = (ProgressBar) findViewById(R.id.pb_loading);
+		gestureImageView = (GestureImageView) findViewById(R.id.iv_content);
+		gestureImageView.setOnClickListener(this);
 	}
 
-	public void loadImage(ImageModel photoModel) {
-		loadImage("file://" + photoModel.getOriginalPath());
+	public void loadImage(ImageModel imageModel) {
+		loadImage("file://" + imageModel.getOriginalPath());
 	}
 
 	private void loadImage(String path) {
 		ImageLoader.getInstance().loadImage(path, new SimpleImageLoadingListener() {
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				ivContent.setImageBitmap(loadedImage);
-				pbLoading.setVisibility(View.GONE);
+				gestureImageView.setImageBitmap(loadedImage);
+				loadingProgressBar.setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-				ivContent.setImageDrawable(getResources().getDrawable(R.drawable.ic_picture_loadfailed));
-				pbLoading.setVisibility(View.GONE);
+				gestureImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_picture_loadfailed));
+				loadingProgressBar.setVisibility(View.GONE);
 			}
 		});
 	}
 
 	@Override
-	public void setOnClickListener(OnClickListener l) {
-		this.l = l;
+	public void setOnClickListener(OnClickListener onClickListener) {
+		this.onClickListener = onClickListener;
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.iv_content_vpp && l != null)
-			l.onClick(ivContent);
-	};
-
+		if (null != onClickListener && v.getId() == R.id.iv_content)
+			onClickListener.onClick(gestureImageView);
+	}
 }

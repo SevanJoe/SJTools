@@ -21,8 +21,8 @@ import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
 import java.util.List;
 
 /**
- * Created by Sevan on 2015/3/12 0012.
+ * Created by Sevan Joe on 2015/3/12.
  */
 public interface OnAlbumLoadListener {
-    void onAlbumLoaded(List<AlbumModel> albumModelList);
+	void onAlbumLoaded(List<AlbumModel> albumModelList);
 }

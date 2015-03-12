@@ -67,7 +67,7 @@ public class ZoomAnimation implements Animation {
 			
 				vector.calculateAngle();
 				
-				// Get the current length
+				// Get the currentIndex length
 				float length = vector.calculateLength();
 				
 				// Multiply length by zoom to get the new length

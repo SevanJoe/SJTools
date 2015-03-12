@@ -25,8 +25,8 @@ import android.os.Process;
 import android.widget.Toast;
 
 import com.sevan.sjlibrary.R;
-import com.sevan.sjlibrary.utils.FileUtils;
-import com.sevan.sjlibrary.utils.LogUtils;
+import com.sevan.sjlibrary.utils.FileUtil;
+import com.sevan.sjlibrary.utils.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -80,7 +80,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
-                LogUtils.e("error: ", e);
+                LogUtil.e("error: ", e);
             }
 
             android.os.Process.killProcess(Process.myPid());
@@ -118,7 +118,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 infoMap.put("versionCode", versionCode);
             }
         } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.e("error occurred during collect package info");
+            LogUtil.e("error occurred during collect package info");
         }
         Field[] fields = Build.class.getDeclaredFields();
         for (Field field : fields) {
@@ -126,7 +126,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             try {
                 infoMap.put(field.getName(), field.get(null).toString());
             } catch (IllegalAccessException e) {
-                LogUtils.e("error occurred during collect crash info");
+                LogUtil.e("error occurred during collect crash info");
             }
         }
     }
@@ -155,7 +155,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private void saveToFile(String string) {
         String time = dateFormat.format(new Date());
         String fileName = "crash-" + time + ".log";
-        String filePath = FileUtils.getExternalFileDir(context);
+        String filePath = FileUtil.getExternalFileDir(context);
         if (null != filePath) {
             filePath += "/log/";
             File dir = new File(filePath);
@@ -169,7 +169,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 fileOutputStream.write(string.getBytes());
                 fileOutputStream.close();
             } catch (IOException e) {
-                LogUtils.e(e.getMessage());
+                LogUtil.e(e.getMessage());
             }
         }
     }

@@ -16,16 +16,15 @@
 
 package com.sevan.sjlibrary.imagepicker.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -48,17 +47,18 @@ import java.util.List;
 /**
  * Created by Sevan Joe on 2015/3/12.
  */
-public class ImagePickerActivity extends Activity implements
-		ImageItem.OnImageClickListener, ImageItem.OnImageCheckChangedListener, OnItemClickListener,
-		OnClickListener {
+public class ImagePickerActivity extends ActionBarActivity implements
+		ImageItem.OnImageClickListener, ImageItem.OnImageCheckChangedListener,
+        OnItemClickListener, OnClickListener {
 
 	public static final String KEY_MAX = "key_max";
 	private static final int DEFAULT_MAX = 9;
-	private int MAX_IMAGE;
+	private int maxCount;
 
 	public static final int REQUEST_PHOTO = 0;
 	private static final int REQUEST_CAMERA = 1;
 
+    private Toolbar toolbar;
 	private GridView imageGridView;
 	private TextView albumTextView;
 	private TextView previewTextView;
@@ -67,17 +67,18 @@ public class ImagePickerActivity extends Activity implements
 	private AlbumAdapter albumAdapter;
 	private RelativeLayout albumLayout;
 	private ArrayList<ImageModel> selectedImageModels;
-	private TextView numberTextView;
+//	private TextView numberTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_imagepicker);
 
 		if (getIntent().getExtras() != null) {
-			MAX_IMAGE = getIntent().getIntExtra(KEY_MAX, DEFAULT_MAX);
+			maxCount = getIntent().getIntExtra(KEY_MAX, DEFAULT_MAX);
 		}
+
+        initViews();
 
 		imagePickLoader = new ImagePickLoader(getApplicationContext());
 
@@ -85,13 +86,13 @@ public class ImagePickerActivity extends Activity implements
 
 		imageGridView = (GridView) findViewById(R.id.gv_images);
 		ListView albumListView = (ListView) findViewById(R.id.lv_album);
-		Button confirmButton = (Button) findViewById(R.id.btn_confirm);
+//		Button confirmButton = (Button) findViewById(R.id.btn_confirm);
 		albumTextView = (TextView) findViewById(R.id.tv_album);
 		previewTextView = (TextView) findViewById(R.id.tv_preview);
 		albumLayout = (RelativeLayout) findViewById(R.id.rl_album);
-		numberTextView = (TextView) findViewById(R.id.tv_number);
+//		numberTextView = (TextView) findViewById(R.id.tv_number);
 
-		confirmButton.setOnClickListener(this);
+//		confirmButton.setOnClickListener(this);
 		albumTextView.setOnClickListener(this);
 		previewTextView.setOnClickListener(this);
 
@@ -104,24 +105,30 @@ public class ImagePickerActivity extends Activity implements
 		albumListView.setAdapter(albumAdapter);
 		albumListView.setOnItemClickListener(this);
 
-		findViewById(R.id.ll_back).setOnClickListener(this);
+//		findViewById(R.id.ll_back).setOnClickListener(this);
 
 		imagePickLoader.loadRecentImageList(recentListener);
 		imagePickLoader.loadAlbumList(albumListener);
 	}
 
+    private void initViews() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.btn_confirm)
-			ok();
-		else if (v.getId() == R.id.tv_album)
+//		if (v.getId() == R.id.btn_confirm)
+//			ok();
+		if (v.getId() == R.id.tv_album)
 			album();
 		else if (v.getId() == R.id.tv_preview)
 			preview();
 		else if (v.getId() == R.id.tv_camera_vc)
 			catchPicture();
-		else if (v.getId() == R.id.ll_back)
-			finish();
+//		else if (v.getId() == R.id.ll_back)
+//			finish();
 	}
 
 	private void catchPicture() {
@@ -134,7 +141,7 @@ public class ImagePickerActivity extends Activity implements
 		if (requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
 			ImageModel photoModel = new ImageModel(CommonUtil.query(
                     getApplicationContext(), data.getData()));
-			if (selectedImageModels.size() >= MAX_IMAGE) {
+			if (selectedImageModels.size() >= maxCount) {
 				Toast.makeText(this, "max count", Toast.LENGTH_SHORT).show();
 				photoModel.setChecked(false);
 				imagePickerAdapter.notifyDataSetChanged();
@@ -188,7 +195,7 @@ public class ImagePickerActivity extends Activity implements
 
 	private void reset() {
 		selectedImageModels.clear();
-		numberTextView.setText("(0)");
+//		numberTextView.setText("(0)");
 		previewTextView.setEnabled(false);
 	}
 
@@ -212,7 +219,7 @@ public class ImagePickerActivity extends Activity implements
 		} else {
 			selectedImageModels.remove(imageModel);
 		}
-		numberTextView.setText("(" + selectedImageModels.size() + ")");
+//		numberTextView.setText("(" + selectedImageModels.size() + ")");
 
 		if (selectedImageModels.isEmpty()) {
 			previewTextView.setEnabled(false);

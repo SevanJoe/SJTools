@@ -7,5 +7,6 @@
     <string name="image_picker">ImagePicker</string>
     <string name="image_preview">ImagePreview</string>
     <string name="recent_photos">Recent Photos</string>
+    <string name="preview">Preview</string>
     <string name="image_count">photos</string>
 </resources>

@@ -1,96 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/black">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
-        android:id="@+id/rl_head"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/layout_title_height"
-        android:layout_alignParentTop="true"
-        android:background="@color/bg">
+    <include layout="@layout/toolbar"/>
 
-        <LinearLayout
-            android:id="@+id/ll_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:orientation="horizontal">
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_head"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/layout_title_height"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:background="@color/bg">-->
 
-            <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/layout_title_content_height"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:contentDescription="@string/image_description"
-                android:src="@drawable/arrow"/>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/ll_back"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:clickable="true"-->
+            <!--android:orientation="horizontal">-->
 
-            <TextView
-                android:id="@+id/tv_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                android:text="返回"
-                android:textColor="#FEFEFE"
-                android:textSize="@dimen/layout_title_text_size"
-                android:visibility="invisible"/>
-        </LinearLayout>
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_back"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="@dimen/layout_title_content_height"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginStart="10dp"-->
+                <!--android:contentDescription="@string/image_description"-->
+                <!--android:src="@drawable/arrow"/>-->
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_vertical"
-            android:text="选择照片"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"/>
+            <!--<TextView-->
+                <!--android:id="@+id/tv_back"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:layout_marginStart="5dp"-->
+                <!--android:text="返回"-->
+                <!--android:textColor="#FEFEFE"-->
+                <!--android:textSize="@dimen/layout_title_text_size"-->
+                <!--android:visibility="invisible"/>-->
+        <!--</LinearLayout>-->
 
-        <Button
-            android:id="@+id/btn_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/tv_number"
-            android:layout_toStartOf="@+id/tv_number"
-            android:background="@color/bg"
-            android:paddingBottom="5dp"
-            android:paddingEnd="0dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="0dp"
-            android:paddingTop="5dp"
-            android:text="确定"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/layout_title_text_size"/>
+        <!--<TextView-->
+            <!--android:id="@+id/tv_title"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:text="选择照片"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="18sp"/>-->
 
-        <TextView
-            android:id="@+id/tv_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:text="(0)"
-            android:textColor="@android:color/white"/>
-    </RelativeLayout>
+        <!--<Button-->
+            <!--android:id="@+id/btn_confirm"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginEnd="5dp"-->
+            <!--android:layout_marginRight="5dp"-->
+            <!--android:layout_toLeftOf="@+id/tv_number"-->
+            <!--android:layout_toStartOf="@+id/tv_number"-->
+            <!--android:background="@color/bg"-->
+            <!--android:paddingBottom="5dp"-->
+            <!--android:paddingEnd="0dp"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:paddingRight="0dp"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:text="确定"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="@dimen/layout_title_text_size"/>-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_number"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginEnd="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:text="(0)"-->
+            <!--android:textColor="@android:color/white"/>-->
+    <!--</RelativeLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/rl_toolbar"
-        android:layout_below="@+id/rl_head">
+        android:layout_above="@+id/rl_footer"
+        android:layout_below="@+id/toolbar">
 
         <GridView
             android:id="@+id/gv_images"
@@ -118,19 +121,19 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="60dp"
                 android:background="@android:color/white"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
                 android:scrollbarStyle="outsideOverlay">
             </ListView>
         </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_toolbar"
+        android:id="@+id/rl_footer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/collection_image_toolbar_height"
         android:layout_alignParentBottom="true"
-        android:background="@color/bg">
+        android:background="@color/primaryColor">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -146,9 +149,9 @@
                 android:layout_marginStart="10dp"
                 android:gravity="start|center_vertical"
                 android:minWidth="50dp"
-                android:text="最近照片"
+                android:text="@string/recent_photos"
                 android:textColor="@drawable/btn_black_text_selector"
-                android:textSize="13sp"/>
+                android:textSize="14sp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -186,7 +189,7 @@
             android:clickable="true"
             android:enabled="false"
             android:padding="10dp"
-            android:text="预览"
+            android:text="@string/preview"
             android:textColor="@android:color/white"/>
     </RelativeLayout>
 

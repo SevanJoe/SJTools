@@ -62,7 +62,7 @@ public class CommonUtil {
 
     public static void launchActivityForResult(Activity context, Class<?> activity, int requestCode, int maxImage) {
         Intent intent = new Intent(context, activity);
-        intent.putExtra(ImagePickerActivity.KEY_MAX, maxImage);
+        intent.putExtra(ImagePickerActivity.COUNT_MAX, maxImage);
         context.startActivityForResult(intent, requestCode);
     }
 

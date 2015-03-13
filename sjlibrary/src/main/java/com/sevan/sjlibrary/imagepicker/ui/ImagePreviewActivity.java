@@ -18,6 +18,7 @@ package com.sevan.sjlibrary.imagepicker.ui;
 
 import android.os.Bundle;
 
+import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.controller.OnImageLoadListener;
@@ -43,17 +44,18 @@ public class ImagePreviewActivity extends BaseImagePreviewActivity implements On
 	}
 
 	protected void init(Bundle extras) {
-		if (extras == null)
-			return;
+		if (null == extras) {
+            return;
+        }
 
-		if (extras.containsKey("imageModelList")) {
-			imageModelList = (List<ImageModel>) extras.getSerializable("imageModelList");
-			currentIndex = extras.getInt("position", 0);
+		if (extras.containsKey(Constants.IMAGE_LIST)) {
+			imageModelList = (List<ImageModel>) extras.getSerializable(Constants.IMAGE_LIST);
+			currentIndex = extras.getInt(Constants.IMAGE_POSITION, 0);
 			updatePercent();
 			bindData();
-		} else if (extras.containsKey("album")) {
-			String albumName = extras.getString("album");
-			this.currentIndex = extras.getInt("position");
+		} else if (extras.containsKey(Constants.ALBUM)) {
+			String albumName = extras.getString(Constants.ALBUM);
+			this.currentIndex = extras.getInt(Constants.IMAGE_POSITION);
 			if (!CommonUtil.isNull(albumName) && albumName.equals(getString(R.string.recent_photos))) {
 				imagePickLoader.loadRecentImageList(this);
 			} else {

@@ -58,7 +58,7 @@ public class ImagePickerActivity extends BaseActivity implements
         ImageItem.OnImageCheckChangedListener,
         OnItemClickListener, OnClickListener {
 
-	public static final String KEY_MAX = "key_max";
+	public static final String COUNT_MAX = "key_max";
 	private static final int DEFAULT_MAX = 9;
 	private int maxCount;
 
@@ -83,7 +83,7 @@ public class ImagePickerActivity extends BaseActivity implements
 		setContentView(R.layout.activity_imagepicker);
 
 		if (getIntent().getExtras() != null) {
-			maxCount = getIntent().getIntExtra(KEY_MAX, DEFAULT_MAX);
+			maxCount = getIntent().getIntExtra(COUNT_MAX, DEFAULT_MAX);
 		}
 
         initViews();
@@ -164,8 +164,6 @@ public class ImagePickerActivity extends BaseActivity implements
 		else if (v.getId() == R.id.btn_preview) {
             preview();
         }
-//		else if (v.getId() == R.id.tv_camera_vc)
-//			catchPicture();
 	}
 
     private void preview() {
@@ -174,18 +172,13 @@ public class ImagePickerActivity extends BaseActivity implements
         CommonUtil.launchActivity(this, ImagePreviewActivity.class, bundle);
     }
 
-//	private void catchPicture() {
-//		CommonUtil.launchActivityForResult(this, new Intent(
-//				MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CAMERA);
-//	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CAMERA && resultCode == RESULT_OK) {
 			ImageModel photoModel = new ImageModel(CommonUtil.query(
                     getApplicationContext(), data.getData()));
 			if (selectedImageModels.size() >= maxCount) {
-				Toast.makeText(this, "max count", Toast.LENGTH_SHORT).show();
+                showMaxTip();
 				photoModel.setChecked(false);
 				imagePickerAdapter.notifyDataSetChanged();
 			} else {
@@ -217,13 +210,17 @@ public class ImagePickerActivity extends BaseActivity implements
 		albumLayout.setVisibility(View.GONE);
 	}
 
+    private void showMaxTip() {
+        Toast.makeText(this, String.format(getString(R.string.select_max_count), maxCount),
+                Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public boolean onImageClick(int position) {
         if (selectedImageModels.size() < maxCount) {
             return true;
         } else {
-            Toast.makeText(this, String.format(getString(R.string.select_max_count), maxCount),
-                    Toast.LENGTH_LONG).show();
+            showMaxTip();
             return false;
         }
     }
@@ -231,12 +228,12 @@ public class ImagePickerActivity extends BaseActivity implements
 	@Override
 	public void onImageLongClick(int position) {
 		Bundle bundle = new Bundle();
-        bundle.putInt("position", position);
+        bundle.putInt(Constants.IMAGE_POSITION, position);
 //		if (albumTextView.getText().toString().equals(getString(R.string.recent_photos))) {
 //            bundle.putInt("position", position - 1);
 //        } else {
 //        }
-		bundle.putString("album", albumTextView.getText().toString());
+		bundle.putString(Constants.ALBUM, albumTextView.getText().toString());
 		CommonUtil.launchActivity(this, ImagePreviewActivity.class, bundle);
 	}
 
@@ -307,7 +304,6 @@ public class ImagePickerActivity extends BaseActivity implements
 			}
 			imagePickerAdapter.update(imageModelList);
 			imageGridView.smoothScrollToPosition(0);
-			// reset(); //--keep selectedImageModels imageModelList
 		}
     };
 }

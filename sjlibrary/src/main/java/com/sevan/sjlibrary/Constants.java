@@ -26,4 +26,6 @@ public class Constants {
 
     // Image Picker
     public static final String IMAGE_LIST = "image_list";
+    public static final String IMAGE_POSITION = "image_position";
+    public static final String ALBUM = "album";
 }

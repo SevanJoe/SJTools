@@ -47,7 +47,7 @@ public class HomeActivity extends BaseActivity {
     @OnClick(R.id.test_hello)
     void testHello() {
         Intent intent = new Intent(this, ImagePickerActivity.class);
-        intent.putExtra(ImagePickerActivity.KEY_MAX, 4);
+        intent.putExtra(ImagePickerActivity.COUNT_MAX, 4);
         startActivity(intent);
     }
 

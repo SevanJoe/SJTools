@@ -16,21 +16,18 @@
 
 package com.sevan.sjlibrary.imagepicker.ui;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.sevan.sjlibrary.R;
+import com.sevan.sjlibrary.base.BaseActivity;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
 import com.sevan.sjlibrary.imagepicker.ui.widget.ImagePreview;
 import com.sevan.sjlibrary.utils.AnimationUtil;
@@ -40,11 +37,10 @@ import java.util.List;
 /**
  * Created by Sevan Joe on 2015/3/12.
  */
-public class BaseImagePreviewActivity extends Activity implements OnPageChangeListener, OnClickListener {
+public class BaseImagePreviewActivity extends BaseActivity implements OnPageChangeListener {
 
-	private ViewPager viewPager;
-	private RelativeLayout topLayout;
-	private TextView percentTextView;
+    private Toolbar toolbar;
+    private ViewPager viewPager;
 
 	protected List<ImageModel> imageModelList;
 
@@ -54,19 +50,21 @@ public class BaseImagePreviewActivity extends Activity implements OnPageChangeLi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_imagepreview);
 
-		topLayout = (RelativeLayout) findViewById(R.id.rl_top);
-		ImageButton backButton = (ImageButton) findViewById(R.id.btn_back);
-		percentTextView = (TextView) findViewById(R.id.tv_percent);
-		viewPager = (ViewPager) findViewById(R.id.vp_base);
+        initViews();
 
-		backButton.setOnClickListener(this);
-		viewPager.setOnPageChangeListener(this);
-
-		overridePendingTransition(R.anim.activity_alpha_action_in, 0);
+        overridePendingTransition(R.anim.activity_alpha_action_in, 0);
 	}
+
+    private void initViews() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        viewPager = (ViewPager) findViewById(R.id.vp_image);
+        viewPager.setOnPageChangeListener(this);
+    }
 
 	protected void bindData() {
 		viewPager.setAdapter(mPagerAdapter);
@@ -106,13 +104,6 @@ public class BaseImagePreviewActivity extends Activity implements OnPageChangeLi
 	};
 
 	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.btn_back) {
-			finish();
-		}
-	}
-
-	@Override
 	public void onPageScrollStateChanged(int arg0) {
 
 	}
@@ -129,7 +120,8 @@ public class BaseImagePreviewActivity extends Activity implements OnPageChangeLi
 	}
 
 	protected void updatePercent() {
-		percentTextView.setText((currentIndex + 1) + "/" + imageModelList.size());
+        getSupportActionBar().setTitle(String.format(getString(R.string.select_count),
+                currentIndex + 1, imageModelList.size()));
 	}
 
 	private OnClickListener imageItemOnClickListener = new OnClickListener() {
@@ -137,11 +129,11 @@ public class BaseImagePreviewActivity extends Activity implements OnPageChangeLi
 		public void onClick(View v) {
 			if (!isUp) {
 				new AnimationUtil(getApplicationContext(), R.anim.translate_up)
-						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(topLayout);
+						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(toolbar);
 				isUp = true;
 			} else {
 				new AnimationUtil(getApplicationContext(), R.anim.translate_down_current)
-						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(topLayout);
+						.setInterpolator(new LinearInterpolator()).setFillAfter(true).startAnimation(toolbar);
 				isUp = false;
 			}
 		}

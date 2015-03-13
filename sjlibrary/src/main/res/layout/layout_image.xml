@@ -17,7 +17,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/btn_checkbox_selector"
-        android:button="@null"/>
+        android:clickable="false"/>
 
 </RelativeLayout>

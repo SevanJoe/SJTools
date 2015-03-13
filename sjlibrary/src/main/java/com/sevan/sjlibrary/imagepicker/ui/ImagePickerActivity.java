@@ -35,7 +35,7 @@ import android.widget.Toast;
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.base.BaseActivity;
-import com.sevan.sjlibrary.imagepicker.Constants;
+import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.controller.OnAlbumLoadListener;
 import com.sevan.sjlibrary.imagepicker.controller.OnImageLoadListener;
@@ -54,7 +54,8 @@ import java.util.List;
  * Created by Sevan Joe on 2015/3/12.
  */
 public class ImagePickerActivity extends BaseActivity implements
-		ImageItem.OnImageClickListener, ImageItem.OnImageCheckChangedListener,
+        ImageItem.OnImageClickListener, ImageItem.OnImageLongClickListener,
+        ImageItem.OnImageCheckChangedListener,
         OnItemClickListener, OnClickListener {
 
 	public static final String KEY_MAX = "key_max";
@@ -68,7 +69,6 @@ public class ImagePickerActivity extends BaseActivity implements
     private GridView imageGridView;
 	private TextView albumTextView;
     private ButtonRectangle previewButton;
-//	private TextView previewTextView;
     private RelativeLayout albumLayout;
     private ListView albumListView;
 
@@ -93,9 +93,6 @@ public class ImagePickerActivity extends BaseActivity implements
         imagePickLoader.loadAlbumList(albumListener);
 
 		selectedImageModels = new ArrayList<>();
-
-//		previewTextView = (TextView) findViewById(R.id.tv_preview);
-//		previewTextView.setOnClickListener(this);
 	}
 
     private void initViews() {
@@ -110,7 +107,7 @@ public class ImagePickerActivity extends BaseActivity implements
         albumListView = (ListView) findViewById(R.id.lv_album);
 
         imagePickerAdapter = new ImagePickerAdapter(getApplicationContext(),
-                new ArrayList<ImageModel>(), CommonUtil.getWidthPixels(this), this, this);
+                new ArrayList<ImageModel>(), CommonUtil.getWidthPixels(this), this, this, this);
         imageGridView.setAdapter(imagePickerAdapter);
 
         previewButton.setOnClickListener(this);
@@ -220,19 +217,25 @@ public class ImagePickerActivity extends BaseActivity implements
 		albumLayout.setVisibility(View.GONE);
 	}
 
-	private void reset() {
-		selectedImageModels.clear();
-//		numberTextView.setText("(0)");
-//		previewTextView.setEnabled(false);
-	}
+    @Override
+    public boolean onImageClick(int position) {
+        if (selectedImageModels.size() < maxCount) {
+            return true;
+        } else {
+            Toast.makeText(this, String.format(getString(R.string.select_max_count), maxCount),
+                    Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
 
 	@Override
-	public void onImageClick(int position) {
+	public void onImageLongClick(int position) {
 		Bundle bundle = new Bundle();
-		if (albumTextView.getText().toString().equals(getString(R.string.recent_photos)))
-			bundle.putInt("position", position - 1);
-		else
-			bundle.putInt("position", position);
+        bundle.putInt("position", position);
+//		if (albumTextView.getText().toString().equals(getString(R.string.recent_photos))) {
+//            bundle.putInt("position", position - 1);
+//        } else {
+//        }
 		bundle.putString("album", albumTextView.getText().toString());
 		CommonUtil.launchActivity(this, ImagePreviewActivity.class, bundle);
 	}

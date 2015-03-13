@@ -41,13 +41,15 @@ import java.util.Random;
 /**
  * Created by Sevan Joe on 3/12/2015.
  */
-public class ImageItem extends LinearLayout implements OnCheckedChangeListener, OnLongClickListener {
+public class ImageItem extends LinearLayout implements View.OnClickListener, OnLongClickListener,
+        OnCheckedChangeListener {
 
 	private ImageView imageView;
 	private CheckBox imageCheckBox;
 
-	private OnImageCheckChangedListener onImageCheckChangedListener;
-	private OnImageClickListener onImageClickListener;
+    private OnImageClickListener onImageClickListener;
+	private OnImageLongClickListener onImageLongClickListener;
+    private OnImageCheckChangedListener onImageCheckChangedListener;
 
 	private ImageModel imageModel;
 
@@ -65,32 +67,23 @@ public class ImageItem extends LinearLayout implements OnCheckedChangeListener, 
 		super(context);
 	}
 
-	public ImageItem(Context context, OnImageCheckChangedListener listener) {
+	public ImageItem(Context context, int position, OnImageClickListener onImageClickListener,
+                     OnImageLongClickListener onImageLongClickListener,
+                     OnImageCheckChangedListener onImageCheckChangedListener) {
 		this(context);
 		LayoutInflater.from(context).inflate(R.layout.layout_image, this, true);
-		this.onImageCheckChangedListener = listener;
+        this.position = position;
+		this.onImageClickListener = onImageClickListener;
+        this.onImageLongClickListener = onImageLongClickListener;
+        this.onImageCheckChangedListener = onImageCheckChangedListener;
 
+        setOnClickListener(this);
 		setOnLongClickListener(this);
 
 		imageView = (ImageView) findViewById(R.id.iv_image);
 		imageCheckBox = (CheckBox) findViewById(R.id.cb_image);
 
 		imageCheckBox.setOnCheckedChangeListener(this);
-	}
-
-	@Override
-	public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-		if (!isCheckAll) {
-			onImageCheckChangedListener.onImageCheckChanged(imageModel, compoundButton, isChecked);
-		}
-		if (isChecked) {
-			imageView.setDrawingCacheEnabled(true);
-			imageView.buildDrawingCache();
-			imageView.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-		} else {
-			imageView.clearColorFilter();
-		}
-		imageModel.setChecked(isChecked);
 	}
 
 	public void setImageDrawable(final ImageModel imageModel) {
@@ -104,34 +97,61 @@ public class ImageItem extends LinearLayout implements OnCheckedChangeListener, 
 		}, new Random().nextInt(10));
 	}
 
-	@Override
-	public void setSelected(boolean selected) {
-		if (imageModel == null) {
-			return;
-		}
-		isCheckAll = true;
-		imageCheckBox.setChecked(selected);
-		isCheckAll = false;
-	}
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
-	public void setOnClickListener(OnImageClickListener onImageClickListener, int position) {
-		this.onImageClickListener = onImageClickListener;
-		this.position = position;
-	}
+    @Override
+    public void onClick(View v) {
+        if (null != onImageClickListener) {
+            if (onImageClickListener.onImageClick(position)) {
+                imageCheckBox.setChecked(!imageCheckBox.isChecked());
+            }
+        }
+    }
 
-	public interface OnImageCheckChangedListener {
-		public void onImageCheckChanged(ImageModel imageModel, CompoundButton compoundButton, boolean isChecked);
-	}
+    @Override
+    public boolean onLongClick(View view) {
+        if (null != onImageLongClickListener) {
+            onImageLongClickListener.onImageLongClick(position);
+        }
+        return true;
+    }
 
-	public interface OnImageClickListener {
-		public void onImageClick(int position);
-	}
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if (!isCheckAll) {
+            onImageCheckChangedListener.onImageCheckChanged(imageModel, compoundButton, isChecked);
+        }
+        if (isChecked) {
+            imageView.setDrawingCacheEnabled(true);
+            imageView.buildDrawingCache();
+            imageView.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        } else {
+            imageView.clearColorFilter();
+        }
+        imageModel.setChecked(isChecked);
+    }
 
-	@Override
-	public boolean onLongClick(View view) {
-		if (null != onImageClickListener) {
-			onImageClickListener.onImageClick(position);
-		}
-		return true;
-	}
+    @Override
+    public void setSelected(boolean selected) {
+        if (imageModel == null) {
+            return;
+        }
+        isCheckAll = true;
+        imageCheckBox.setChecked(selected);
+        isCheckAll = false;
+    }
+
+    public interface OnImageClickListener {
+        public boolean onImageClick(int position);
+    }
+
+    public interface OnImageLongClickListener {
+        public void onImageLongClick(int position);
+    }
+
+    public interface OnImageCheckChangedListener {
+        public void onImageCheckChanged(ImageModel imageModel, CompoundButton compoundButton, boolean isChecked);
+    }
 }

@@ -34,20 +34,24 @@ public class ImagePickerAdapter extends ImageBaseAdapter<ImageModel> {
 
 	private static final int HORIZONTAL_NUM = 3;
 
-	private ImageItem.OnImageCheckChangedListener listener;
-	private LayoutParams itemLayoutParams;
-	private ImageItem.OnImageClickListener callback;
+    private LayoutParams itemLayoutParams;
+    private ImageItem.OnImageClickListener onImageClickListener;
+	private ImageItem.OnImageLongClickListener onImageLongClickListener;
+    private ImageItem.OnImageCheckChangedListener onImageCheckChangedListener;
 
 	private ImagePickerAdapter(Context context, ArrayList<ImageModel> models) {
 		super(context, models);
 	}
 
 	public ImagePickerAdapter(Context context, ArrayList<ImageModel> imageModels, int screenWidth,
-	                          ImageItem.OnImageCheckChangedListener listener, ImageItem.OnImageClickListener callback) {
+                              ImageItem.OnImageClickListener onImageClickListener,
+                              ImageItem.OnImageLongClickListener onImageLongClickListener,
+                              ImageItem.OnImageCheckChangedListener onImageCheckChangedListener) {
 		this(context, imageModels);
-		setItemWidth(screenWidth);
-		this.listener = listener;
-		this.callback = callback;
+		this.onImageClickListener = onImageClickListener;
+		this.onImageLongClickListener = onImageLongClickListener;
+        this.onImageCheckChangedListener = onImageCheckChangedListener;
+        setItemWidth(screenWidth);
 	}
 
 	public void setItemWidth(int screenWidth) {
@@ -58,17 +62,18 @@ public class ImagePickerAdapter extends ImageBaseAdapter<ImageModel> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ImageItem item;
+		ImageItem imageItem;
 		if (null == convertView || !(convertView instanceof ImageItem)) {
-			item = new ImageItem(context, listener);
-			item.setLayoutParams(itemLayoutParams);
-			convertView = item;
+			imageItem = new ImageItem(context, position, onImageClickListener, onImageLongClickListener,
+                    onImageCheckChangedListener);
+			imageItem.setLayoutParams(itemLayoutParams);
+			convertView = imageItem;
 		} else {
-			item = (ImageItem) convertView;
+			imageItem = (ImageItem) convertView;
 		}
-		item.setImageDrawable(models.get(position));
-		item.setSelected(models.get(position).isChecked());
-		item.setOnClickListener(callback, position);
+		imageItem.setImageDrawable(models.get(position));
+		imageItem.setSelected(models.get(position).isChecked());
+        imageItem.setPosition(position);
 		return convertView;
 	}
 }

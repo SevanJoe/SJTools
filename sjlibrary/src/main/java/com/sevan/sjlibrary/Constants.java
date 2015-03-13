@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker;
+package com.sevan.sjlibrary;
 
 /**
  * Created by Sevan Joe on 3/13/2015.
  */
 public class Constants {
+    // Image Common
     public static final int IMAGE_HEIGHT = 800;
     public static final int IMAGE_WIDTH = 480;
 
+    // Image Picker
     public static final String IMAGE_LIST = "image_list";
 }

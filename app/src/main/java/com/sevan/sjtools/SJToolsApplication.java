@@ -21,7 +21,7 @@ import android.content.Context;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.sevan.sjlibrary.imagepicker.Constants;
+import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.tools.CrashHandler;
 
 /**

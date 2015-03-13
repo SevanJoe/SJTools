@@ -220,6 +220,9 @@ public class ImagePickerActivity extends BaseActivity implements
         if (selectedImageModels.size() < maxCount) {
             return true;
         } else {
+            if (((ImageModel) imagePickerAdapter.getItem(position)).isChecked()) {
+                return true;
+            }
             showMaxTip();
             return false;
         }
@@ -240,8 +243,9 @@ public class ImagePickerActivity extends BaseActivity implements
 	@Override
 	public void onImageCheckChanged(ImageModel imageModel, CompoundButton compoundButton, boolean isChecked) {
 		if (isChecked) {
-			if (!selectedImageModels.contains(imageModel))
-				selectedImageModels.add(imageModel);
+			if (!selectedImageModels.contains(imageModel)) {
+                selectedImageModels.add(imageModel);
+            }
             previewButton.setClickable(true);
 		} else {
 			selectedImageModels.remove(imageModel);

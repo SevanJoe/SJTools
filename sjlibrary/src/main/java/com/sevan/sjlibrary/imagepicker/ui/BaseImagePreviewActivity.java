@@ -21,6 +21,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -66,7 +67,17 @@ public class BaseImagePreviewActivity extends BaseActivity implements OnPageChan
         viewPager.setOnPageChangeListener(this);
     }
 
-	protected void bindData() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void bindData() {
 		viewPager.setAdapter(mPagerAdapter);
 		viewPager.setCurrentItem(currentIndex);
 	}

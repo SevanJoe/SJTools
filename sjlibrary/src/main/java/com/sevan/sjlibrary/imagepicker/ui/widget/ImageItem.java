@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker.view;
+package com.sevan.sjlibrary.imagepicker.ui.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
 
@@ -57,7 +58,8 @@ public class ImageItem extends LinearLayout implements OnCheckedChangeListener, 
 			.showImageOnLoading(R.drawable.ic_picture_loading)
 			.showImageOnFail(R.drawable.ic_picture_loadfailed)
 			.cacheInMemory(true).cacheOnDisk(true).considerExifParams(true)
-			.bitmapConfig(Bitmap.Config.RGB_565).build();
+			.bitmapConfig(Bitmap.Config.RGB_565)
+            .imageScaleType(ImageScaleType.EXACTLY).build();
 
 	private ImageItem(Context context) {
 		super(context);
@@ -117,7 +119,7 @@ public class ImageItem extends LinearLayout implements OnCheckedChangeListener, 
 		this.position = position;
 	}
 
-	public static interface OnImageCheckChangedListener {
+	public interface OnImageCheckChangedListener {
 		public void onImageCheckChanged(ImageModel imageModel, CompoundButton compoundButton, boolean isChecked);
 	}
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker.view;
+package com.sevan.sjlibrary.imagepicker.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
+import com.sevan.sjlibrary.imagepicker.ui.widget.ImagePreview;
 import com.sevan.sjlibrary.utils.AnimationUtil;
 
 import java.util.List;

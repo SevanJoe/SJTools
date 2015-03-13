@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package com.sevan.sjtools.view;
+package com.sevan.sjtools.ui;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.sevan.sjlibrary.base.BaseActivity;
-import com.sevan.sjlibrary.imagepicker.view.ImagePickerActivity;
+import com.sevan.sjlibrary.imagepicker.ui.ImagePickerActivity;
 import com.sevan.sjtools.R;
 
 import butterknife.ButterKnife;
@@ -53,7 +48,6 @@ public class HomeActivity extends BaseActivity {
     void testHello() {
         Intent intent = new Intent(this, ImagePickerActivity.class);
         intent.putExtra(ImagePickerActivity.KEY_MAX, 4);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 

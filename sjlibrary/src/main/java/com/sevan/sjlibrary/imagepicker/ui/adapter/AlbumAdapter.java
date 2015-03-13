@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker.view;
+package com.sevan.sjlibrary.imagepicker.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
+import com.sevan.sjlibrary.imagepicker.ui.widget.AlbumItem;
 
 import java.util.ArrayList;
 

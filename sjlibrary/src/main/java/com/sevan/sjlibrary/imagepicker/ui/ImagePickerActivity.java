@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker.view;
+package com.sevan.sjlibrary.imagepicker.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,13 +32,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonRectangle;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.base.BaseActivity;
+import com.sevan.sjlibrary.imagepicker.Constants;
 import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.controller.OnAlbumLoadListener;
 import com.sevan.sjlibrary.imagepicker.controller.OnImageLoadListener;
 import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
+import com.sevan.sjlibrary.imagepicker.ui.adapter.AlbumAdapter;
+import com.sevan.sjlibrary.imagepicker.ui.adapter.ImagePickerAdapter;
+import com.sevan.sjlibrary.imagepicker.ui.widget.ImageItem;
 import com.sevan.sjlibrary.utils.AnimationUtil;
 import com.sevan.sjlibrary.utils.CommonUtil;
 
@@ -63,8 +67,10 @@ public class ImagePickerActivity extends BaseActivity implements
     private MenuItem countMenuItem;
     private GridView imageGridView;
 	private TextView albumTextView;
-	private TextView previewTextView;
+    private ButtonRectangle previewButton;
+//	private TextView previewTextView;
     private RelativeLayout albumLayout;
+    private ListView albumListView;
 
 	private ImagePickLoader imagePickLoader;
 	private ImagePickerAdapter imagePickerAdapter;
@@ -83,35 +89,36 @@ public class ImagePickerActivity extends BaseActivity implements
         initViews();
 
 		imagePickLoader = new ImagePickLoader(getApplicationContext());
+        imagePickLoader.loadRecentImageList(recentListener);
+        imagePickLoader.loadAlbumList(albumListener);
 
 		selectedImageModels = new ArrayList<>();
 
-		imageGridView = (GridView) findViewById(R.id.gv_images);
-		ListView albumListView = (ListView) findViewById(R.id.lv_album);
-		albumTextView = (TextView) findViewById(R.id.tv_album);
-		previewTextView = (TextView) findViewById(R.id.tv_preview);
-		albumLayout = (RelativeLayout) findViewById(R.id.rl_album);
-
-		albumTextView.setOnClickListener(this);
-		previewTextView.setOnClickListener(this);
-
-		imagePickerAdapter = new ImagePickerAdapter(getApplicationContext(),
-				new ArrayList<ImageModel>(), CommonUtil.getWidthPixels(this),
-				this, this, this);
-		imageGridView.setAdapter(imagePickerAdapter);
-
-		albumAdapter = new AlbumAdapter(getApplicationContext(), new ArrayList<AlbumModel>());
-		albumListView.setAdapter(albumAdapter);
-		albumListView.setOnItemClickListener(this);
-
-		imagePickLoader.loadRecentImageList(recentListener);
-		imagePickLoader.loadAlbumList(albumListener);
+//		previewTextView = (TextView) findViewById(R.id.tv_preview);
+//		previewTextView.setOnClickListener(this);
 	}
 
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        imageGridView = (GridView) findViewById(R.id.gv_images);
+        previewButton = (ButtonRectangle) findViewById(R.id.btn_preview);
+        albumTextView = (TextView) findViewById(R.id.tv_album);
+        albumLayout = (RelativeLayout) findViewById(R.id.rl_album);
+        albumListView = (ListView) findViewById(R.id.lv_album);
+
+        imagePickerAdapter = new ImagePickerAdapter(getApplicationContext(),
+                new ArrayList<ImageModel>(), CommonUtil.getWidthPixels(this), this, this);
+        imageGridView.setAdapter(imagePickerAdapter);
+
+        previewButton.setOnClickListener(this);
+        albumTextView.setOnClickListener(this);
+
+        albumAdapter = new AlbumAdapter(getApplicationContext(), new ArrayList<AlbumModel>());
+        albumListView.setAdapter(albumAdapter);
+        albumListView.setOnItemClickListener(this);
     }
 
     @Override
@@ -145,7 +152,7 @@ public class ImagePickerActivity extends BaseActivity implements
         } else {
             Intent data = new Intent();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("imageModelList", selectedImageModels);
+            bundle.putSerializable(Constants.IMAGE_LIST, selectedImageModels);
             data.putExtras(bundle);
             setResult(RESULT_OK, data);
         }
@@ -154,18 +161,26 @@ public class ImagePickerActivity extends BaseActivity implements
 
     @Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.tv_album)
-			album();
-		else if (v.getId() == R.id.tv_preview)
-			preview();
-		else if (v.getId() == R.id.tv_camera_vc)
-			catchPicture();
+		if (v.getId() == R.id.tv_album) {
+            album();
+        }
+		else if (v.getId() == R.id.btn_preview) {
+            preview();
+        }
+//		else if (v.getId() == R.id.tv_camera_vc)
+//			catchPicture();
 	}
 
-	private void catchPicture() {
-		CommonUtil.launchActivityForResult(this, new Intent(
-				MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CAMERA);
-	}
+    private void preview() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(Constants.IMAGE_LIST, selectedImageModels);
+        CommonUtil.launchActivity(this, ImagePreviewActivity.class, bundle);
+    }
+
+//	private void catchPicture() {
+//		CommonUtil.launchActivityForResult(this, new Intent(
+//				MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CAMERA);
+//	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -183,12 +198,6 @@ public class ImagePickerActivity extends BaseActivity implements
 			}
 			select();
 		}
-	}
-
-	private void preview() {
-		Bundle bundle = new Bundle();
-		bundle.putSerializable("imageModelList", selectedImageModels);
-		CommonUtil.launchActivity(this, ImagePreviewActivity.class, bundle);
 	}
 
 	private void album() {
@@ -214,7 +223,7 @@ public class ImagePickerActivity extends BaseActivity implements
 	private void reset() {
 		selectedImageModels.clear();
 //		numberTextView.setText("(0)");
-		previewTextView.setEnabled(false);
+//		previewTextView.setEnabled(false);
 	}
 
 	@Override
@@ -233,36 +242,40 @@ public class ImagePickerActivity extends BaseActivity implements
 		if (isChecked) {
 			if (!selectedImageModels.contains(imageModel))
 				selectedImageModels.add(imageModel);
-			previewTextView.setEnabled(true);
+            previewButton.setClickable(true);
 		} else {
 			selectedImageModels.remove(imageModel);
 		}
-//		numberTextView.setText("(" + selectedImageModels.size() + ")");
 
 		if (selectedImageModels.isEmpty()) {
-			previewTextView.setEnabled(false);
-			previewTextView.setText(getString(R.string.preview));
-		}
+            previewButton.setClickable(false);
+            previewButton.setText(getString(R.string.preview));
+		} else {
+            previewButton.setText(String.format(getString(R.string.preview_count), selectedImageModels.size()));
+        }
+
+        updateSelectCount();
 	}
 
 	@Override
 	public void onBackPressed() {
 		if (albumLayout.getVisibility() == View.VISIBLE) {
 			hideAlbum();
-		} else
-			super.onBackPressed();
+		} else {
+            super.onBackPressed();
+        }
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		AlbumModel current = (AlbumModel) parent.getItemAtPosition(position);
 		for (int i = 0; i < parent.getCount(); i++) {
 			AlbumModel album = (AlbumModel) parent.getItemAtPosition(i);
-			if (i == position)
-				album.setCheck(true);
-			else
-				album.setCheck(false);
+			if (i == position) {
+                album.setCheck(true);
+            } else {
+                album.setCheck(false);
+            }
 		}
 		albumAdapter.notifyDataSetChanged();
 		hideAlbum();

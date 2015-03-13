@@ -21,6 +21,7 @@ import android.content.Context;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.sevan.sjlibrary.imagepicker.Constants;
 import com.sevan.sjlibrary.tools.CrashHandler;
 
 /**
@@ -43,7 +44,9 @@ public class SJToolsApplication extends Application {
     }
 
     private void initImageLoader(Context context) {
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context).build();
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                .memoryCacheExtraOptions(Constants.IMAGE_WIDTH, Constants.IMAGE_HEIGHT)
+                .diskCacheExtraOptions(Constants.IMAGE_WIDTH, Constants.IMAGE_HEIGHT, null).build();
         ImageLoader.getInstance().init(config);
     }
 }

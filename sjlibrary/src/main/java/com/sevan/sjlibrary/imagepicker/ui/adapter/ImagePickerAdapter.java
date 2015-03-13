@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker.view;
+package com.sevan.sjlibrary.imagepicker.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
+import com.sevan.sjlibrary.imagepicker.ui.widget.ImageItem;
 
 import java.util.ArrayList;
 
@@ -37,20 +37,17 @@ public class ImagePickerAdapter extends ImageBaseAdapter<ImageModel> {
 	private ImageItem.OnImageCheckChangedListener listener;
 	private LayoutParams itemLayoutParams;
 	private ImageItem.OnImageClickListener callback;
-	private OnClickListener cameraListener;
 
 	private ImagePickerAdapter(Context context, ArrayList<ImageModel> models) {
 		super(context, models);
 	}
 
 	public ImagePickerAdapter(Context context, ArrayList<ImageModel> imageModels, int screenWidth,
-	                          ImageItem.OnImageCheckChangedListener listener, ImageItem.OnImageClickListener callback,
-	                          OnClickListener cameraListener) {
+	                          ImageItem.OnImageCheckChangedListener listener, ImageItem.OnImageClickListener callback) {
 		this(context, imageModels);
 		setItemWidth(screenWidth);
 		this.listener = listener;
 		this.callback = callback;
-		this.cameraListener = cameraListener;
 	}
 
 	public void setItemWidth(int screenWidth) {

@@ -25,7 +25,7 @@ import android.os.Bundle;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.util.DisplayMetrics;
 
-import com.sevan.sjlibrary.imagepicker.view.ImagePickerActivity;
+import com.sevan.sjlibrary.imagepicker.ui.ImagePickerActivity;
 
 /**
  * Created by Sevan Joe on 3/11/2015.
@@ -34,14 +34,12 @@ public class CommonUtil {
 
     public static void launchActivity(Context context, Class<?> activity) {
         Intent intent = new Intent(context, activity);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         context.startActivity(intent);
     }
 
     public static void launchActivity(Context context, Class<?> activity, Bundle bundle) {
         Intent intent = new Intent(context, activity);
         intent.putExtras(bundle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         context.startActivity(intent);
     }
 
@@ -59,14 +57,12 @@ public class CommonUtil {
 
     public static void launchActivityForResult(Activity context, Class<?> activity, int requestCode) {
         Intent intent = new Intent(context, activity);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         context.startActivityForResult(intent, requestCode);
     }
 
     public static void launchActivityForResult(Activity context, Class<?> activity, int requestCode, int maxImage) {
         Intent intent = new Intent(context, activity);
         intent.putExtra(ImagePickerActivity.KEY_MAX, maxImage);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         context.startActivityForResult(intent, requestCode);
     }
 

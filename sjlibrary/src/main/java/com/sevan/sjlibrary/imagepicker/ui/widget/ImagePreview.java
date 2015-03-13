@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sevan.sjlibrary.imagepicker.view;
+package com.sevan.sjlibrary.imagepicker.ui.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;

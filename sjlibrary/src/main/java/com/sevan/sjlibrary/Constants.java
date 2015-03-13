@@ -24,6 +24,7 @@ public class Constants {
     public static final int IMAGE_HEIGHT = 800;
     public static final int IMAGE_WIDTH = 480;
     public static final int IMAGE_SIZE_MIN = 1024 * 10;
+    public static final String LOCAL_IMAGE_PREFIX = "file://";
 
     // Image Picker
     public static final String IMAGE_LIST = "image_list";

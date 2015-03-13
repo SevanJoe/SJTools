@@ -29,13 +29,13 @@ import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ButtonRectangle;
+import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.base.BaseActivity;
-import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.imagepicker.controller.ImagePickLoader;
 import com.sevan.sjlibrary.imagepicker.controller.OnAlbumLoadListener;
 import com.sevan.sjlibrary.imagepicker.controller.OnImageLoadListener;
@@ -67,7 +67,7 @@ public class ImagePickerActivity extends BaseActivity implements
 
     private MenuItem countMenuItem;
     private GridView imageGridView;
-	private TextView albumTextView;
+    private ButtonFlat albumButton;
     private ButtonRectangle previewButton;
     private RelativeLayout albumLayout;
     private ListView albumListView;
@@ -101,8 +101,8 @@ public class ImagePickerActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imageGridView = (GridView) findViewById(R.id.gv_images);
+        albumButton = (ButtonFlat) findViewById(R.id.btn_album);
         previewButton = (ButtonRectangle) findViewById(R.id.btn_preview);
-        albumTextView = (TextView) findViewById(R.id.tv_album);
         albumLayout = (RelativeLayout) findViewById(R.id.rl_album);
         albumListView = (ListView) findViewById(R.id.lv_album);
 
@@ -110,8 +110,8 @@ public class ImagePickerActivity extends BaseActivity implements
                 new ArrayList<ImageModel>(), CommonUtil.getWidthPixels(this), this, this, this);
         imageGridView.setAdapter(imagePickerAdapter);
 
+        albumButton.setOnClickListener(this);
         previewButton.setOnClickListener(this);
-        albumTextView.setOnClickListener(this);
 
         albumAdapter = new AlbumAdapter(getApplicationContext(), new ArrayList<AlbumModel>());
         albumListView.setAdapter(albumAdapter);
@@ -158,7 +158,7 @@ public class ImagePickerActivity extends BaseActivity implements
 
     @Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.tv_album) {
+		if (v.getId() == R.id.btn_album) {
             album();
         }
 		else if (v.getId() == R.id.btn_preview) {
@@ -236,7 +236,7 @@ public class ImagePickerActivity extends BaseActivity implements
 //            bundle.putInt("position", position - 1);
 //        } else {
 //        }
-		bundle.putString(Constants.ALBUM, albumTextView.getText().toString());
+		bundle.putString(Constants.ALBUM, albumButton.getText().toString());
 		CommonUtil.launchActivity(this, ImagePreviewActivity.class, bundle);
 	}
 
@@ -283,7 +283,7 @@ public class ImagePickerActivity extends BaseActivity implements
 		}
 		albumAdapter.notifyDataSetChanged();
 		hideAlbum();
-		albumTextView.setText(current.getName());
+		albumButton.setText(current.getName());
 
 		if (current.getName().equals(getString(R.string.recent_photos)))
 			imagePickLoader.loadRecentImageList(recentListener);

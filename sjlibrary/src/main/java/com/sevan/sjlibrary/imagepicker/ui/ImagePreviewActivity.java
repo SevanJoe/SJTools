@@ -43,6 +43,7 @@ public class ImagePreviewActivity extends BaseImagePreviewActivity implements On
 		init(getIntent().getExtras());
 	}
 
+    @SuppressWarnings("unchecked")
 	protected void init(Bundle extras) {
 		if (null == extras) {
             return;

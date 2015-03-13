@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
 
@@ -59,7 +60,7 @@ public class AlbumItem extends LinearLayout {
      * @param path cover image path
      */
 	public void setAlbumImage(String path) {
-		ImageLoader.getInstance().displayImage("file://" + path, coverImageView);
+		ImageLoader.getInstance().displayImage(Constants.LOCAL_IMAGE_PREFIX + path, coverImageView);
 	}
 
 	public void update(AlbumModel albumModel) {
@@ -74,7 +75,7 @@ public class AlbumItem extends LinearLayout {
 	}
 
 	public void setCount(int count) {
-		countTextView.setHint(count + getContext().getString(R.string.image_count));
+		countTextView.setHint(String.format(getContext().getString(R.string.image_count), count));
 	}
 
 	public void isCheck(boolean isCheck) {

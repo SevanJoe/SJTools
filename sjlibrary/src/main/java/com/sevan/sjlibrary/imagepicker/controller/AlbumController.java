@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.Images.Media;
 
+import com.sevan.sjlibrary.Constants;
 import com.sevan.sjlibrary.R;
 import com.sevan.sjlibrary.imagepicker.model.AlbumModel;
 import com.sevan.sjlibrary.imagepicker.model.ImageModel;
@@ -47,14 +48,14 @@ public class AlbumController {
 	public List<ImageModel> getRecentImageList() {
 		Cursor cursor = contentResolver.query(Media.EXTERNAL_CONTENT_URI,
 				new String[]{ImageColumns.DATA, ImageColumns.DATE_ADDED, ImageColumns.SIZE},
-				null, null, ImageColumns.DATE_ADDED);
+				null, null, ImageColumns.DATE_TAKEN);
 		if (null == cursor || !cursor.moveToNext()) {
 			return new ArrayList<>();
 		}
 		List<ImageModel> imageModelList = new ArrayList<>();
 		cursor.moveToLast();
 		do {
-			if (cursor.getLong(cursor.getColumnIndex(ImageColumns.SIZE)) > 1024 * 10) {
+			if (cursor.getLong(cursor.getColumnIndex(ImageColumns.SIZE)) > Constants.IMAGE_SIZE_MIN) {
 				ImageModel imageModel = new ImageModel();
 				imageModel.setOriginalPath(cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)));
 				imageModelList.add(imageModel);
@@ -69,15 +70,16 @@ public class AlbumController {
 		Map<String, AlbumModel> albumModelMap = new HashMap<>();
 		Cursor cursor = contentResolver.query(Media.EXTERNAL_CONTENT_URI,
 				new String[]{ImageColumns.DATA, ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.SIZE},
-				null, null, null);
+				null, null, ImageColumns.DATE_TAKEN);
 		if (null == cursor || !cursor.moveToNext()) {
 			return new ArrayList<>();
 		}
 		cursor.moveToLast();
-		AlbumModel currentAlbum = new AlbumModel(context.getString(R.string.recent_photos), 0, cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)), true);
+		AlbumModel currentAlbum = new AlbumModel(context.getString(R.string.recent_photos), 0,
+                cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)), true);
 		albumModelList.add(currentAlbum);
 		do {
-			if (cursor.getInt(cursor.getColumnIndex(ImageColumns.SIZE)) < 1024 * 10) {
+			if (cursor.getInt(cursor.getColumnIndex(ImageColumns.SIZE)) < Constants.IMAGE_SIZE_MIN) {
 				continue;
 			}
 			currentAlbum.increaseCount();
@@ -85,7 +87,8 @@ public class AlbumController {
 			if (albumModelMap.keySet().contains(name)) {
 				albumModelMap.get(name).increaseCount();
 			} else {
-				AlbumModel albumModel = new AlbumModel(name, 1, cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)));
+				AlbumModel albumModel = new AlbumModel(name, 1,
+                        cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)));
 				albumModelMap.put(name, albumModel);
 				albumModelList.add(albumModel);
 			}
@@ -96,15 +99,16 @@ public class AlbumController {
 
 	public List<ImageModel> getImageListByAlbum(String name) {
 		Cursor cursor = contentResolver.query(Media.EXTERNAL_CONTENT_URI,
-				new String[]{ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.DATA, ImageColumns.DATE_ADDED, ImageColumns.SIZE},
-				"bucket_display_name = ?", new String[]{name}, ImageColumns.DATE_ADDED);
+				new String[]{ImageColumns.BUCKET_DISPLAY_NAME, ImageColumns.DATA,
+                        ImageColumns.DATE_ADDED, ImageColumns.SIZE},
+				ImageColumns.BUCKET_DISPLAY_NAME + " = ?", new String[]{name}, ImageColumns.DATE_TAKEN);
 		if (null == cursor || !cursor.moveToNext()) {
 			return new ArrayList<>();
 		}
 		List<ImageModel> imageModelList = new ArrayList<>();
 		cursor.moveToLast();
 		do {
-			if (cursor.getLong(cursor.getColumnIndex(ImageColumns.SIZE)) > 1024 * 10) {
+			if (cursor.getLong(cursor.getColumnIndex(ImageColumns.SIZE)) > Constants.IMAGE_SIZE_MIN) {
 				ImageModel imageModel = new ImageModel();
 				imageModel.setOriginalPath(cursor.getString(cursor.getColumnIndex(ImageColumns.DATA)));
 				imageModelList.add(imageModel);

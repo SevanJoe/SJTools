@@ -59,7 +59,7 @@ public class ImagePreviewActivity extends BaseImagePreviewActivity implements On
 			if (!CommonUtil.isNull(albumName) && albumName.equals(getString(R.string.recent_photos))) {
 				imagePickLoader.loadRecentImageList(this);
 			} else {
-				imagePickLoader.getAlbum(albumName, this);
+				imagePickLoader.loadAlbumImageList(albumName, this);
 			}
 		}
 	}

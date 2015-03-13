@@ -63,7 +63,7 @@ public class ImagePickLoader {
 		}).start();
 	}
 
-	public void getAlbum(final String name, OnImageLoadListener onImageLoadListener) {
+	public void loadAlbumImageList(final String name, OnImageLoadListener onImageLoadListener) {
 		final ImageHandler imageHandler = new ImageHandler(onImageLoadListener);
 		new Thread(new Runnable() {
 			@Override
@@ -83,11 +83,12 @@ public class ImagePickLoader {
 			this.onAlbumLoadListener = new WeakReference<>(albumLoadListener);
 		}
 
+        @SuppressWarnings("unchecked")
 		@Override
 		public void handleMessage(Message msg) {
 			OnAlbumLoadListener albumLoadListener = onAlbumLoadListener.get();
 			if (null != albumLoadListener) {
-				albumLoadListener.onAlbumLoaded((List<AlbumModel>) msg.obj);
+                albumLoadListener.onAlbumLoaded((List<AlbumModel>) msg.obj);
 			}
 		}
 	}
@@ -99,6 +100,7 @@ public class ImagePickLoader {
 			this.onImageLoadListener = new WeakReference<>(imageLoadListener);
 		}
 
+        @SuppressWarnings("unchecked")
 		@Override
 		public void handleMessage(Message msg) {
 			OnImageLoadListener imageLoadListener = onImageLoadListener.get();

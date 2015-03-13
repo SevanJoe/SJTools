@@ -288,7 +288,7 @@ public class ImagePickerActivity extends BaseActivity implements
 		if (current.getName().equals(getString(R.string.recent_photos)))
 			imagePickLoader.loadRecentImageList(recentListener);
 		else
-			imagePickLoader.getAlbum(current.getName(), recentListener);
+			imagePickLoader.loadAlbumImageList(current.getName(), recentListener);
 	}
 
 	private OnAlbumLoadListener albumListener = new OnAlbumLoadListener() {
